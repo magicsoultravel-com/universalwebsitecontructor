@@ -1,0 +1,285 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Gradient Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .preview-box {
+            width: 100%;
+            height: 300px;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+        .control-group input[type="text"],
+        .control-group input[type="color"],
+        .control-group select {
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        .color-picker-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease;
+        }
+        .color-picker-item:hover {
+            background-color: #f3f4f6;
+        }
+        .remove-color-btn {
+            background-color: #ef4444;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: none;
+        }
+        .order-btn {
+            background-color: #d1d5db;
+            color: #4b5563;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+<script src="assets/js/demo-auth.js" defer></script></head>
+<body class="p-8">
+    <div class="max-w-4xl mx-auto space-y-8">
+        <h1 class="text-3xl font-bold text-center text-gray-800">Advanced CSS Gradient Playground</h1>
+        
+        <div id="preview" class="preview-box" style=""></div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-lg">
+            <form id="gradient-form" class="space-y-6">
+                <div class="control-group">
+                    <label for="gradient_type" class="block text-gray-700 font-semibold mb-2">Gradient Type:</label>
+                    <select id="gradient_type" name="gradient_type" class="w-full rounded-lg shadow-sm">
+                        <option value="linear" selected>Linear Gradient</option>
+                        <option value="radial">Radial Gradient</option>
+                        <option value="conic">Conic Gradient</option>
+                    </select>
+                </div>
+
+                <div id="color-pickers" class="space-y-2">
+                    <label class="block text-gray-700 font-semibold">Colors:</label>
+                    <div class="color-picker-item">
+                        <input type="color" name="colors" value="#4facfe" class="flex-shrink-0">
+                        <input type="text" name="stops" value="" placeholder="Stop" readonly class="w-1/4">
+                        <div class="flex flex-col gap-1">
+                            <button type="button" class="order-btn up-btn">â†‘</button>
+                            <button type="button" class="order-btn down-btn">â†“</button>
+                        </div>
+                        <button type="button" class="remove-color-btn hidden">Remove</button>
+                    </div>
+                    <div class="color-picker-item">
+                        <input type="color" name="colors" value="#00f2fe" class="flex-shrink-0">
+                        <input type="text" name="stops" value="" placeholder="Stop" readonly class="w-1/4">
+                        <div class="flex flex-col gap-1">
+                            <button type="button" class="order-btn up-btn">â†‘</button>
+                            <button type="button" class="order-btn down-btn">â†“</button>
+                        </div>
+                        <button type="button" class="remove-color-btn hidden">Remove</button>
+                    </div>
+                </div>
+                <button type="button" id="add-color-btn" class="w-full py-2 px-4 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-200">Add Another Color</button>
+
+                <div id="linear-options" class="control-group" style="display: block;">
+                    <label class="block text-gray-700 font-semibold mb-2 mt-4">Direction/Angle:</label>
+                    <input type="text" id="linear-angle-input" name="direction" value="180deg" class="w-full mt-2 text-center">
+                </div>
+
+                <div id="radial-options" class="control-group" style="display: none;">
+                    <label for="shape" class="block text-gray-700 font-semibold mb-2 mt-4">Shape:</label>
+                    <select name="shape" class="w-full rounded-lg shadow-sm">
+                        <option value="circle">Circle</option>
+                        <option value="ellipse">Ellipse</option>
+                    </select>
+                    <label for="size" class="block text-gray-700 font-semibold mb-2 mt-4">Size:</label>
+                    <select name="size" class="w-full rounded-lg shadow-sm">
+                        <option value="closest-side">Closest Side</option>
+                        <option value="closest-corner">Closest Corner</option>
+                        <option value="farthest-side">Farthest Side</option>
+                        <option value="farthest-corner" selected>Farthest Corner</option>
+                    </select>
+                    <label for="position" class="block text-gray-700 font-semibold mb-2 mt-4">Position:</label>
+                    <input type="text" name="position" value="center" placeholder="e.g., center, top left">
+                </div>
+
+                <div id="conic-options" class="control-group" style="display: none;">
+                    <label for="rotation" class="block text-gray-700 font-semibold mb-2 mt-4">Rotation:</label>
+                    <input type="text" name="rotation" value="0deg" placeholder="e.g., 90deg">
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-lg">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Generated CSS</h2>
+            <div class="bg-gray-100 p-4 rounded-lg overflow-x-auto">
+                <pre class="text-sm text-gray-700 font-mono" id="css-code"></pre>
+            </div>
+            <button id="copy-btn" class="mt-4 w-full py-2 px-4 bg-green-500 text-white rounded-lg font-semibold hover:bg-green-600 transition-colors duration-200">Copy CSS</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const preview = document.getElementById('preview');
+            const form = document.getElementById('gradient-form');
+            const typeSelect = document.getElementById('gradient_type');
+            const colorPickerContainer = document.getElementById('color-pickers');
+            const addColorBtn = document.getElementById('add-color-btn');
+            const linearOptions = document.getElementById('linear-options');
+            const radialOptions = document.getElementById('radial-options');
+            const conicOptions = document.getElementById('conic-options');
+            const linearAngleInput = document.getElementById('linear-angle-input');
+            const cssCode = document.getElementById('css-code');
+            const copyBtn = document.getElementById('copy-btn');
+
+            const updatePreview = () => {
+                const type = typeSelect.value;
+                const colorItems = Array.from(colorPickerContainer.querySelectorAll('.color-picker-item'));
+                const colors = colorItems.map(item => item.querySelector('input[name="colors"]').value);
+                
+                const stops = colorItems.map((item, index) => {
+                    const totalColors = colorItems.length;
+                    if (totalColors <= 1) {
+                        item.querySelector('input[name="stops"]').value = '0%';
+                        return '0%';
+                    }
+                    const stopValue = `${Math.round(index / (totalColors - 1) * 100)}%`;
+                    item.querySelector('input[name="stops"]').value = stopValue;
+                    return stopValue;
+                });
+                
+                let options = {};
+                switch (type) {
+                    case 'linear':
+                        options.direction = linearAngleInput.value;
+                        break;
+                    case 'radial':
+                        options.shape = form.querySelector('[name="shape"]').value;
+                        options.size = form.querySelector('[name="size"]').value;
+                        options.position = form.querySelector('[name="position"]').value;
+                        break;
+                    case 'conic':
+                        options.rotation = form.querySelector('[name="rotation"]').value;
+                        break;
+                }
+                
+                const colorStops = colors.map((color, index) => `${color} ${stops[index]}`).join(', ');
+                
+                let css = '';
+                if (type.includes('linear')) {
+                    css = `${type}-gradient(${options.direction}, ${colorStops})`;
+                } else if (type.includes('radial')) {
+                    css = `${type}-gradient(${options.shape} ${options.size} at ${options.position}, ${colorStops})`;
+                } else if (type.includes('conic')) {
+                    css = `${type}-gradient(from ${options.rotation} at 50% 50%, ${colorStops})`;
+                }
+                
+                preview.style.backgroundImage = css;
+                cssCode.textContent = `background-image: ${css};`;
+            };
+
+            const updateButtons = () => {
+                const items = Array.from(colorPickerContainer.querySelectorAll('.color-picker-item'));
+                items.forEach((item, index) => {
+                    const upBtn = item.querySelector('.up-btn');
+                    const downBtn = item.querySelector('.down-btn');
+                    const removeBtn = item.querySelector('.remove-color-btn');
+                    upBtn.disabled = index === 0;
+                    downBtn.disabled = index === items.length - 1;
+                    removeBtn.classList.toggle('hidden', items.length <= 2);
+                });
+            };
+
+            colorPickerContainer.addEventListener('click', (e) => {
+                const item = e.target.closest('.color-picker-item');
+                if (!item) return;
+                
+                if (e.target.classList.contains('up-btn')) {
+                    const prevItem = item.previousElementSibling;
+                    if (prevItem) {
+                        colorPickerContainer.insertBefore(item, prevItem);
+                        updatePreview();
+                        updateButtons();
+                    }
+                } else if (e.target.classList.contains('down-btn')) {
+                    const nextItem = item.nextElementSibling;
+                    if (nextItem) {
+                        colorPickerContainer.insertBefore(nextItem, item);
+                        updatePreview();
+                        updateButtons();
+                    }
+                } else if (e.target.classList.contains('remove-color-btn')) {
+                    item.remove();
+                    updatePreview();
+                    updateButtons();
+                }
+            });
+
+            typeSelect.addEventListener('change', () => {
+                const selectedType = typeSelect.value;
+                linearOptions.style.display = selectedType === 'linear' ? 'block' : 'none';
+                radialOptions.style.display = selectedType === 'radial' ? 'block' : 'none';
+                conicOptions.style.display = selectedType === 'conic' ? 'block' : 'none';
+                updatePreview();
+            });
+
+            addColorBtn.addEventListener('click', () => {
+                const newColorPicker = document.createElement('div');
+                newColorPicker.className = 'color-picker-item';
+                newColorPicker.innerHTML = `
+                    <input type="color" name="colors" value="#ffffff" class="flex-shrink-0">
+                    <input type="text" name="stops" value="" placeholder="Stop" readonly class="w-1/4">
+                    <div class="flex flex-col gap-1">
+                        <button type="button" class="order-btn up-btn">â†‘</button>
+                        <button type="button" class="order-btn down-btn">â†“</button>
+                    </div>
+                    <button type="button" class="remove-color-btn">Remove</button>
+                `;
+                colorPickerContainer.appendChild(newColorPicker);
+                updateButtons();
+                updatePreview();
+            });
+
+            form.addEventListener('input', (e) => {
+                updatePreview();
+            });
+            
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(cssCode.textContent).then(() => {
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Copy CSS';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+            });
+
+            updateButtons();
+            updatePreview();
+        });
+    </script>
+<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+</html>
+

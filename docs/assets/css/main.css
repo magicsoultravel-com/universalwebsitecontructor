@@ -1,0 +1,1488 @@
+﻿/* Neumorphism Theme: Adapting the elegant dark theme to a soft, modern neumorphic style. */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #00005c;  /* A slightly lighter, more central color for the effect */
+    color: #f2f2f2;             /* soft white */
+    text-align: center;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+main {
+    padding: 20px;
+    margin: 0 auto;
+}
+
+section {
+    padding: 25px;
+    margin: 20px 0;
+    background: #1a1a1a;
+    border-radius: 20px;
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.6), -6px -6px 12px rgba(45, 45, 45, 0.4);
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+section:hover {
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.6), -4px -4px 8px rgba(45, 45, 45, 0.4);
+    transform: scale(0.99);
+}
+
+section > * {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/* Headers & Footers */
+header, footer {
+    padding: 20px;
+    background-color: transparent;
+    color: #f2f2f2;
+    text-align: center;
+    border-radius: 0;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5 {
+    font-weight: 500;
+    margin-top: 0.2em;
+    margin-bottom: 0.6em;
+    color: #f9f9f9;
+}
+
+h1 { font-size: 2.4em; }
+h2 { font-size: 1.9em; }
+h3 { font-size: 1.6em; }
+h4 { font-size: 1.4em; }
+h5 { font-size: 1.2em; }
+
+p {
+    margin-top: 0;
+    margin-bottom: 1em;
+    color: #ddd;
+}
+
+a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #fff;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background: #1a1a1a;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.6), inset -3px -3px 6px rgba(45, 45, 45, 0.4);
+}
+
+th, td {
+    padding: 10px;
+    border: none;
+    text-align: left;
+    color: #e6e6e6;
+}
+
+th {
+    background: #1a1a1a;
+    color: #f2f2f2;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.6), inset -3px -3px 6px rgba(45, 45, 45, 0.4);
+}
+
+/* Regular Buttons */
+button {
+    font-family: inherit;
+    font-size: 0.9em;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 50px;
+    background: #1a1a1a;
+    color: #f2f2f2;
+    font-weight: 600;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.6), -4px -4px 8px rgba(45, 45, 45, 0.4);
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6), -2px -2px 4px rgba(45, 45, 45, 0.4);
+    transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 12px;
+    }
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.6em; }
+}
+
+@media (max-width: 480px) {
+    body { font-size: 14px; }
+    h1 { font-size: 1.7em; }
+    h2 { font-size: 1.3em; }
+}
+
+/* Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    color: #f2f2f2;
+    padding: 20px;
+    width: 500px;
+    min-width: 300px;
+    min-height: 200px;
+    max-width: 90%;
+    max-height: 80%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 8px 8px 16px rgba(0,0,0,0.6), -8px -8px 16px rgba(45, 45, 45, 0.4);
+}
+
+.modal-textarea {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    resize: both;
+    background: #1a1a1a;
+    color: #f2f2f2;
+    border: none;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.6), inset -3px -3px 6px rgba(45, 45, 45, 0.4);
+}
+
+.resizer-handle {
+    width: 12px;
+    height: 12px;
+    background: transparent;
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    cursor: se-resize;
+}
+
+.modal-buttons {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.modal-button {
+    background: #1a1a1a;
+    color: #f2f2f2;
+    border: none;
+    padding: 8px 15px;
+    margin-left: 8px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.6), -4px -4px 8px rgba(45, 45, 45, 0.4);
+    transition: all 0.2s ease-in-out;
+}
+
+.modal-button:hover {
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6), -2px -2px 4px rgba(45, 45, 45, 0.4);
+    transform: scale(0.98);
+}
+
+.modal-status {
+    margin-left: 10px;
+    font-style: italic;
+    color: #ccc;
+}
+
+/* Notepad Button */
+.notepad-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    background: #1a1a1a;
+    border: none;
+    padding: 15px 20px;
+    color: #f2f2f2;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.6), -4px -4px 12px rgba(45, 45, 45, 0.4);
+    transition: all 0.2s ease-in-out;
+}
+
+.notepad-button:hover {
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.6), -2px -2px 6px rgba(45, 45, 45, 0.4);
+    transform: scale(0.98);
+}
+
+/* Floating button */
+.floating-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10000;
+    background: #1a1a1a;
+    border: none;
+    padding: 15px 20px;
+    color: #f2f2f2;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.6), -4px -4px 12px rgba(45, 45, 45, 0.4);
+    transition: all 0.2s ease-in-out;
+}
+
+.floating-button:hover {
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.6), -2px -2px 6px rgba(45, 45, 45, 0.4);
+    transform: scale(0.98);
+}
+
+/* A4 modal window */
+.a4-modal {
+    width: 210mm;
+    height: 297mm;
+    max-width: 90%;
+    max-height: 90vh;
+    padding: 20px;
+    overflow: auto;
+}
+
+/* Show modal window */
+.modal-overlay.show {
+    display: flex;
+}
+
+/* Limit page width for desktop */
+body > header,
+body > footer,
+body > main,
+body > .container {
+    max-width: 80vw;
+    margin: 0 auto;
+}
+
+/* Ensure sections inside container still have padding */
+body > main section {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Keep full width for smaller screens */
+@media (max-width: 768px) {
+    body > header,
+    body > footer,
+    body > main,
+    body > .container {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+/* Separator under article titles */
+.cms-article h2,
+.cms-article h3,
+.cms-article h4,
+.cms-article h5 {
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+/* Background Image */
+.background-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+
+
+/* Neumorphism Theme: A consolidated, lean version of the dark neumorphic style. */
+
+/* === 1. CSS Variables for easy maintenance === */
+:root {
+  /* Colors */
+  --primary-bg: #00ff00;
+  --element-bg: #0000ff;
+  --soft-white: #f2f2f2;
+  --text-color: #ffffff;
+  --heading-color: #f9f9f9;
+  --link-color: #ccc;
+  --link-hover-color: #fff;
+
+  /* Box Shadows */
+  --shadow-dark: rgba(0, 0, 0, 0.6);
+  --shadow-light: rgba(45, 45, 45, 0.4);
+
+  --shadow-convex-lg: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+  --shadow-convex-md: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  --shadow-convex-sm: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+
+  --shadow-concave-md: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+  --shadow-concave-sm: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+}
+
+/* === 2. Global & Typography Styles (Consolidated) === */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: var(--primary-bg);
+    color: var(--soft-white);
+    text-align: center;
+}
+
+header, footer {
+    padding: 20px;
+    background-color: transparent;
+    color: var(--soft-white);
+    text-align: center;
+    border-radius: 0;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: 500;
+    margin-top: 0.2em;
+    margin-bottom: 0.6em;
+    color: var(--heading-color);
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1em;
+    color: var(--text-color);
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
+/* === 3. Neumorphic Elements (Consolidated) === */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.left-sidebar, .right-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    margin-top: 45px;
+    font-size: 80%;
+}
+.left-sidebar h2, .right-sidebar h2 {
+    font-size: 1.2em;
+}
+
+.left-sidebar p, .right-sidebar p {
+    font-size: 0.9em;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+main {
+    padding: 20px;
+    margin: 0 auto;
+}
+
+/* Convex (Outward) Elements */
+section, .modal-content {
+    background: var(--element-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow-convex-lg);
+    transition: all 0.2s ease-in-out;
+}
+
+section {
+    padding: 25px;
+    margin: 20px 0;
+    box-sizing: border-box;
+    border: none;
+}
+section:first-of-type {
+    margin-top: 0;
+}
+
+section > * {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+section:hover {
+    box-shadow: var(--shadow-convex-md);
+    transform: scale(0.99);
+}
+
+/* All Buttons (Convex) */
+button, .modal-button, .notepad-button, .floating-button {
+    font-family: inherit;
+    font-size: 0.9em;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background: var(--element-bg);
+    color: var(--soft-white);
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: var(--shadow-convex-md);
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover, .modal-button:hover, .notepad-button:hover, .floating-button:hover {
+    box-shadow: var(--shadow-convex-sm);
+    transform: scale(0.98);
+}
+
+/* New: Grouped Buttons at the Top */
+.panel-buttons-top {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 101;
+}
+.action-button-group {
+    /* Styles for the grouped buttons */
+    padding: 10px 20px;
+    border-radius: 12px;
+}
+
+/* New: Buttons on the Edges */
+.panel-buttons-edges {
+    /* This container holds all the edge buttons */
+    position: fixed;
+    z-index: 101;
+}
+
+.action-button-circle-left, .action-button-circle-right, .action-button-circle-bottom {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 1em;
+    line-height: 60px;
+    text-align: center;
+}
+.action-button-circle-left {
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.action-button-circle-right {
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.action-button-circle-bottom {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* === 4. Modal Styles === */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background-color: var(--element-bg);
+    margin: auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-convex-lg);
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+}
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* === Slide-in Panels === */
+.slide-panel {
+    position: fixed;
+    z-index: 99;
+    background: var(--element-bg);
+    box-shadow: var(--shadow-convex-lg);
+    transition: transform 0.3s ease-in-out;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.close-panel-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    box-shadow: none;
+    color: var(--text-color);
+}
+
+/* Panel that slides from the top */
+.panel-top {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    transform: translateY(-100%);
+}
+.panel-top.is-open {
+    transform: translateY(0);
+}
+
+/* Panel that slides from the left */
+.panel-left {
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    transform: translateX(-100%);
+}
+.panel-left.is-open {
+    transform: translateX(0);
+}
+
+/* Panel that slides from the right */
+.panel-right {
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100vh;
+    transform: translateX(100%);
+}
+.panel-right.is-open {
+    transform: translateX(0);
+}
+
+/* Panel that slides from the bottom */
+.panel-bottom {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    transform: translateY(100%);
+}
+.panel-bottom.is-open {
+    transform: translateY(0);
+}
+
+/* === New Design Trope Styles === */
+
+/* Card Grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.card {
+    background: var(--element-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow-convex-md);
+    padding: 20px;
+    text-align: left;
+    transition: all 0.2s ease-in-out;
+}
+.card:hover {
+    box-shadow: var(--shadow-convex-sm);
+    transform: translateY(-5px);
+}
+.card h4 {
+    margin-top: 0;
+    color: var(--heading-color);
+}
+
+/* Accordion */
+.accordion-item {
+    margin-bottom: 10px;
+}
+.accordion-button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background-color: var(--element-bg);
+    color: var(--soft-white);
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: var(--shadow-convex-md);
+    transition: all 0.2s ease-in-out;
+}
+.accordion-button:hover {
+    box-shadow: var(--shadow-convex-sm);
+}
+.accordion-content {
+    background-color: var(--element-bg);
+    overflow: hidden;
+    max-height: 0;
+    padding: 0 15px;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+    border-radius: 0 0 10px 10px;
+}
+.accordion-content p {
+    margin: 15px 0;
+}
+
+/* Tabs */
+.tabs {
+    background: var(--element-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow-convex-md);
+    padding: 10px;
+}
+.tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 15px;
+    background: var(--element-bg);
+    box-shadow: var(--shadow-concave-sm);
+}
+.tab-button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px;
+    color: var(--text-color);
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+.tab-button.active {
+    background: var(--element-bg);
+    color: var(--soft-white);
+    box-shadow: var(--shadow-convex-sm);
+}
+.tab-content-container {
+    padding: 10px;
+    min-height: 100px;
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+
+/* Carousel */
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin: 20px 0;
+}
+.carousel-track {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+}
+.carousel-slide {
+    min-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.carousel-prev-btn, .carousel-next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--element-bg);
+    color: var(--soft-white);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: var(--shadow-convex-md);
+    z-index: 10;
+}
+.carousel-prev-btn {
+    left: 10px;
+}
+.carousel-next-btn {
+    right: 10px;
+}
+
+/* Filters */
+.filter-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.filter-btn {
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9em;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+.breadcrumbs a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+.breadcrumbs span {
+    color: var(--text-color);
+}
+
+
+/* === 5. Responsive Design & Other Styles === */
+@media (max-width: 768px) {
+    .flex-container {
+        flex-direction: column;
+        padding: 12px;
+    }
+    .main-content, .left-sidebar, .right-sidebar {
+        width: 100%;
+    }
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.6em; }
+    body > header,
+    body > footer,
+    body > main,
+    body > .container {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+@media (max-width: 480px) {
+    body { font-size: 14px; }
+    h1 { font-size: 1.7em; }
+    h2 { font-size: 1.3em; }
+}
+
+/* Limit page width for desktop */
+body > header,
+body > footer,
+body > main,
+body > .container {
+    max-width: 80vw;
+    margin: 0 auto;
+}
+
+body > main section {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Separator under article titles */
+.cms-article h2,
+.cms-article h3,
+.cms-article h4,
+.cms-article h5 {
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+/* Background Image */
+.background-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Neumorphism Theme: Adapting the elegant dark theme to a soft, modern neumorphic style. */
+
+/* === General Styles === */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 16px;
+    line-height: 1.6;
+    transition: all 0.5s ease-in-out;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+main {
+    padding: 20px;
+    margin: 0 auto;
+}
+
+section {
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Headers & Footers */
+header, footer {
+    padding: 20px;
+    background-color: transparent;
+    color: #f2f2f2;
+    text-align: center;
+    border-radius: 0;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5 {
+    font-weight: 500;
+    margin-top: 0.2em;
+    margin-bottom: 0.6em;
+    color: #f9f9f9;
+}
+
+h1 { font-size: 2.4em; }
+h2 { font-size: 1.9em; }
+h3 { font-size: 1.6em; }
+h4 { font-size: 1.4em; }
+h5 { font-size: 1.2em; }
+
+p {
+    margin-top: 0;
+    margin-bottom: 1em;
+    color: #ddd;
+}
+
+a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #fff;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 10px;
+    border: none;
+    text-align: left;
+    color: #e6e6e6;
+}
+
+/* Regular Buttons */
+button {
+    font-family: inherit;
+    font-size: 0.9em;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+    transform: scale(0.98);
+}
+
+/* Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    padding: 20px;
+    width: 500px;
+    min-width: 300px;
+    min-height: 200px;
+    max-width: 90%;
+    max-height: 80%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.modal-textarea {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    resize: both;
+    border: none;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 14px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border-radius: 12px;
+}
+
+.resizer-handle {
+    width: 12px;
+    height: 12px;
+    background: transparent;
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    cursor: se-resize;
+}
+
+.modal-buttons {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.modal-button {
+    border: none;
+    padding: 8px 15px;
+    margin-left: 8px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.modal-button:hover {
+    transform: scale(0.98);
+}
+
+.modal-status {
+    margin-left: 10px;
+    font-style: italic;
+}
+
+/* Notepad Button */
+.notepad-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    border: none;
+    padding: 15px 20px;
+    color: #f2f2f2;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.notepad-button:hover {
+    transform: scale(0.98);
+}
+
+/* Floating button */
+.floating-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10000;
+    border: none;
+    padding: 15px 20px;
+    color: #f2f2f2;
+    font-weight: bold;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.floating-button:hover {
+    transform: scale(0.98);
+}
+
+/* A4 modal window */
+.a4-modal {
+    width: 210mm;
+    height: 297mm;
+    max-width: 90%;
+    max-height: 90vh;
+    padding: 20px;
+    overflow: auto;
+}
+
+/* Show modal window */
+.modal-overlay.show {
+    display: flex;
+}
+
+/* Limit page width for desktop */
+body > header,
+body > footer,
+body > main,
+body > .container {
+    max-width: 80vw;
+    margin: 0 auto;
+}
+
+/* Ensure sections inside container still have padding */
+body > main section {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Keep full width for smaller screens */
+@media (max-width: 768px) {
+    body > header,
+    body > footer,
+    body > main,
+    body > .container {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+/* Separator under article titles */
+.cms-article h2,
+.cms-article h3,
+.cms-article h4,
+.cms-article h5 {
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+/* Background Image */
+.background-img {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* --- Layout-Specific Styles --- */
+
+/* === Classic Layout === */
+body.classic-layout {
+    background-color: #1a1a1a;
+    color: #f2f2f2;
+}
+
+body.classic-layout section {
+    padding: 25px;
+    margin: 20px 0;
+    background: #1a1a1a;
+    border-radius: 20px;
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.6), -6px -6px 12px rgba(45, 45, 45, 0.4);
+    border: none;
+}
+
+body.classic-layout section:hover {
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.6), -4px -4px 8px rgba(45, 45, 45, 0.4);
+    transform: scale(0.99);
+}
+
+body.classic-layout section > * {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+body.classic-layout table {
+    background: #1a1a1a;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.6), inset -3px -3px 6px rgba(45, 45, 45, 0.4);
+}
+
+body.classic-layout th {
+    background: #1a1a1a;
+    color: #f2f2f2;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.6), inset -3px -3px 6px rgba(45, 45, 45, 0.4);
+}
+
+body.classic-layout button {
+    background: #1a1a1a;
+    color: #f2f2f2;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.6), -4px -4px 8px rgba(45, 45, 45, 0.4);
+}
+
+body.classic-layout button:hover {
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6), -2px -2px 4px rgba(45, 45, 45, 0.4);
+}
+
+body.classic-layout .modal-content {
+    background: #1a1a1a;
+    color: #f2f2f2;
+    box-shadow: 8px 8px 16px rgba(0,0,0,0.6), -8px -8px 16px rgba(45, 45, 45, 0.4);
+}
+
+body.classic-layout .modal-textarea {
+    background: #1a1a1a;
+    color: #f2f2f2;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.6), inset -3px -3px 6px rgba(45, 45, 45, 0.4);
+}
+
+body.classic-layout .modal-button {
+    background: #1a1a1a;
+    color: #f2f2f2;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.6), -4px -4px 8px rgba(45, 45, 45, 0.4);
+}
+
+body.classic-layout .modal-button:hover {
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6), -2px -2px 4px rgba(45, 45, 45, 0.4);
+}
+
+body.classic-layout .modal-status {
+    color: #ccc;
+}
+
+body.classic-layout .notepad-button,
+body.classic-layout .floating-button,
+body.classic-layout .layout-switcher button {
+    background: #1a1a1a;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.6), -4px -4px 12px rgba(45, 45, 45, 0.4);
+    color: #f2f2f2;
+}
+
+body.classic-layout .notepad-button:hover,
+body.classic-layout .floating-button:hover,
+body.classic-layout .layout-switcher button:hover {
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.6), -2px -2px 6px rgba(45, 45, 45, 0.4);
+}
+
+/* === Scrollytelling Layout === */
+body.scrollytelling-layout {
+    background-color: #000;
+    color: #f2f2f2;
+    overflow-x: hidden;
+}
+
+body.scrollytelling-layout main {
+    padding: 0;
+}
+
+#scrolly-visuals {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.5s ease-in-out;
+}
+
+#scrolly-sections {
+    position: relative;
+    z-index: 1;
+}
+
+#scrolly-sections section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 0;
+    box-shadow: none;
+}
+
+body.scrollytelling-layout .layout-switcher button {
+    background: #333;
+    color: white;
+}
+
+/* === Minimal Layout === */
+body.minimal-layout {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+body.minimal-layout h1, body.minimal-layout h2, body.minimal-layout h3 {
+    color: #222;
+}
+
+body.minimal-layout p {
+    color: #555;
+}
+
+body.minimal-layout a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+body.minimal-layout .container {
+    max-width: 800px;
+}
+
+body.minimal-layout section,
+body.minimal-layout table,
+body.minimal-layout button,
+body.minimal-layout .modal-content,
+body.minimal-layout .modal-textarea,
+body.minimal-layout .modal-button,
+body.minimal-layout .notepad-button,
+body.minimal-layout .floating-button {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: none;
+    border-radius: 5px;
+}
+
+body.minimal-layout section,
+body.minimal-layout .modal-content,
+body.minimal-layout .modal-textarea {
+    border-radius: 8px;
+}
+
+body.minimal-layout button,
+body.minimal-layout .modal-button,
+body.minimal-layout .notepad-button,
+body.minimal-layout .floating-button {
+    border-radius: 5px;
+    color: #333;
+    padding: 8px 12px;
+}
+
+body.minimal-layout .modal-status {
+    color: #777;
+}
+
+body.minimal-layout .layout-switcher button {
+    background: #eee;
+    color: #333;
+    border: 1px solid #ddd;
+    box-shadow: none;
+}
+
+body.minimal-layout .layout-switcher button:hover {
+    background: #ddd;
+    transform: none;
+}
+
+/* === Dashboard Layout === */
+body.dashboard-layout {
+    background-color: #111;
+    color: #f2f2f2;
+}
+
+body.dashboard-layout .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+body.dashboard-layout .dashboard-widget {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.6), -6px -6px 12px rgba(45, 45, 45, 0.4);
+}
+
+/* === Magazine Layout === */
+body.magazine-layout {
+    background-color: #fcfcfc;
+    color: #333;
+}
+
+body.magazine-layout .magazine-header {
+    text-align: center;
+    padding: 20px;
+}
+
+body.magazine-layout .magazine-article {
+    column-count: 2;
+    column-gap: 40px;
+    padding: 20px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+body.magazine-layout .magazine-sidebar {
+    background-color: #f0f0f0;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+body.magazine-layout .layout-switcher button {
+    background: #555;
+    color: #f9f9f9;
+}
+
+/* === Parallax Layout === */
+body.parallax-layout {
+    background-color: #000;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+body.parallax-layout main {
+    padding: 0;
+}
+
+.parallax-section {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.parallax-content-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.regular-section {
+    height: auto;
+    background-color: #1a1a1a;
+    padding: 80px 0;
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.5);
+}
+/* --- New Top Bar Styles --- */
+.top-bar {
+    width: 100%;
+    background-color: rgba(26, 26, 26, 0.9);
+    backdrop-filter: blur(5px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    padding: 10px 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.top-bar .logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #f2f2f2;
+}
+
+.main-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.main-menu a {
+    color: #ccc;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.main-menu a:hover {
+    color: #fff;
+}
+
+.layout-switcher {
+    display: flex;
+    gap: 10px;
+}
+/* Landing page */
+.landing { max-width: 720px; margin: 0 auto; padding: 24px; text-align: left; }
+.landing h1 { text-align: center; }
+.landing ul { list-style: none; padding: 0; }
+.landing li { margin: 8px 0; }
+.landing a { font-size: 1.1em; }
+.landing .tag { font-size: 0.75em; color: #888; margin-left: 8px; }
+.landing section { margin-bottom: 24px; }
+.demo-note { font-size: 0.85em; color: #aaa; font-style: italic; margin-bottom: 16px; }
+.bottom-login-status { margin-top: 16px; padding: 12px; }
+.login-form input { margin: 4px; padding: 8px; border-radius: 8px; border: none; background: #1a1a1a; color: #f2f2f2; }

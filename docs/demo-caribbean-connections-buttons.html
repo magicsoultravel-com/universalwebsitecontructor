@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caribbean Connections Buttons — UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+</head>
+<body>
+<main class="container">
+<h1>Caribbean Connections Buttons</h1>
+<p class="demo-note">Static demo page.</p>
+
+
+<div class="buttons-container">
+    <!-- First row: global buttons -->
+    <div class="buttons-row">
+        
+            <button
+                type="button"
+                class="btn "
+                data-type=""
+                style="">
+                
+            </button>
+        
+
+        <!-- Destination dropdown -->
+        <select id="destination-select" style="margin:3px 5px; padding:8px 15px; border-radius:6px; border:1px solid #ccc; min-width:150px;">
+            <option value="">Destination ðŸŽ¯</option>
+            
+                <option value=""></option>
+            
+        </select>
+
+        <button id="clear-destination" type="button" class="btn" style="background:#8b5cf6;color:white;">Clear</button>
+    </div>
+
+    <!-- Second row: airline buttons -->
+    <div class="buttons-row" style="margin-top:10px;">
+        
+            <button
+                type="button"
+                class="btn "
+                data-type=""
+                data-name=""
+                style="background:;color:white;margin:3px 5px;">
+                
+            </button>
+        
+    </div>
+</div>
+
+<script>
+const state = { flights:true, ferry:true, time:true };
+let destinationLocation = null;
+const connections = ;
+const airports = ;
+
+document.querySelectorAll('button[data-type^="airline-"]').forEach(b => {
+  if (!(b.dataset.type in state)) state[b.dataset.type] = true;
+});
+const btn = (t) => document.querySelector(`button[data-type="${CSS.escape(t)}"]`);
+
+function toggleType(type) {
+  if(type==='reset'){
+    // reset all toggles AND clear destination filter, then refresh UI
+    for(const k in state) state[k]=true;
+    destinationLocation = null;
+    const destEl = document.getElementById('destination-select');
+    if(destEl) destEl.value = '';
+    // restore visuals
+    document.querySelectorAll('button[data-type^="airline-"]').forEach(b => b.classList.add('active'));
+    document.querySelectorAll('.btn[data-type]').forEach(x => {
+      const t = x.dataset.type;
+      if(t && (t in state)) x.classList.toggle('active', state[t]);
+    });
+    updateAllCells();
+    updateButtonTexts();
+    return;
+  }
+
+  if(type==='hideall'){
+    const anyOn = Object.values(state).some(v => v === true);
+    for(const k in state) state[k] = !anyOn;
+    document.querySelectorAll('button[data-type^="airline-"]').forEach(b=>{ state[b.dataset.type]=!anyOn; b.classList.toggle('active',!anyOn); });
+    ['flights','ferry','time'].forEach(t=>{ const be=btn(t); if(be) be.classList.toggle('active',!anyOn); });
+    updateAllCells();
+    updateButtonTexts();
+    return;
+  }
+
+  state[type] = !state[type];
+
+  if(type==='flights'){
+    if(!state.flights){
+      state.time = false;
+      document.querySelectorAll('button[data-type^="airline-"]').forEach(b=>{ state[b.dataset.type]=false; b.classList.remove('active'); });
+      const tbtn = btn('time'); if(tbtn) tbtn.classList.remove('active');
+    } else {
+      document.querySelectorAll('button[data-type^="airline-"]').forEach(b=>{ state[b.dataset.type]=true; b.classList.add('active'); });
+      state.time = true;
+      const tbtn = btn('time'); if(tbtn) tbtn.classList.add('active');
+    }
+  }
+
+  const toggled = btn(type); if(toggled) toggled.classList.toggle('active', state[type]);
+  updateAllCells();
+  updateButtonTexts();
+}
+
+function updateAllCells(){
+  const table = document.querySelector('table');
+  if (!table) return;
+
+  const rows = table.querySelectorAll('tbody tr');
+  const headers = table.querySelectorAll('thead th');
+
+  rows.forEach((row) => {
+    const rowHeader = row.querySelector('th');
+    const rowAirport = rowHeader?.textContent?.trim();
+
+    const cells = row.querySelectorAll('td');
+    cells.forEach((cell, colIndex) => {
+      const colHeader = headers[colIndex + 1]?.textContent?.trim(); // +1 because first th is row header
+
+      // Decide if this cell's content should be shown based on destination filter
+      const shouldShowContent = !destinationLocation ||
+                                rowAirport === destinationLocation ||
+                                colHeader === destinationLocation;
+
+      // Keep table layout; control content inside cell
+      cell.style.display = '';
+
+      if (!shouldShowContent) {
+        // Remove content but keep cell present
+        // Store original HTML in data-orig if not present, so reset can restore icons/text
+        if (!cell.dataset.orig) cell.dataset.orig = cell.innerHTML;
+        cell.innerHTML = '';
+      } else {
+        // Restore content from data-orig if we cleared it before
+        if (cell.dataset.orig && cell.innerHTML === '') {
+          cell.innerHTML = cell.dataset.orig;
+        }
+        // Apply icon visibility rules
+        const icons = cell.querySelectorAll('.fas.fa-plane, .plane-icon, .fas.fa-ship, .ferry-icon');
+        icons.forEach(icon => {
+          if (icon.classList.contains('fa-ship') || icon.classList.contains('ferry-icon')) {
+            icon.style.display = state.ferry ? '' : 'none';
+          } else {
+            const m = icon.className.match(/airline-([A-Z0-9]+)/i);
+            const code = m ? m[1] : null;
+            const key = code ? 'airline-' + code : null;
+            icon.style.display = key ? (state[key] ? '' : 'none') : '';
+          }
+        });
+
+        // Duration visibility
+        const duration = cell.querySelector('.duration');
+        if (duration) duration.style.display = state.time ? '' : 'none';
+
+        // "No direct" handling
+        if (cell.classList.contains('nodirect')) {
+          cell.textContent = state.flights ? 'No direct' : '';
+        }
+      }
+    });
+  });
+
+  // Keep all rows and headers visible structurally
+  rows.forEach(row => row.style.display = '');
+  headers.forEach(header => header.style.display = '');
+}
+
+function updateButtonTexts(){
+  const main = {
+    flights: state.flights ? 'Hide Flights âœˆï¸' : 'Show Flights âœˆï¸',
+    ferry: state.ferry ? 'Hide Ferry ðŸš¢' : 'Show Ferry ðŸš¢',
+    time: state.time ? 'Hide Time â±ï¸' : 'Show Time â±ï¸'
+  };
+
+  document.querySelectorAll('button.btn').forEach(b => {
+    const type = b.dataset.type; if(!type) return;
+    if(type === 'reset'){ b.textContent = 'Reset All ðŸ”„'; return; }
+    if(type === 'hideall'){ const allOn = Object.values(state).every(v => v === true); b.textContent = allOn ? 'Hide All âŒ' : 'Show All âœ…'; return; }
+    if(type.startsWith('airline-')){
+      const name = b.dataset.name || b.textContent.replace(/^(Hide|Show)\s+/,'').replace(' âœˆï¸','');
+      b.textContent = (state[type] ? 'Hide ' : 'Show ') + name + ' âœˆï¸';
+      return;
+    }
+    if(main[type]) b.textContent = main[type];
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // wire up global/airline buttons
+  document.querySelectorAll('button[data-type]').forEach(b => {
+    b.addEventListener('click', (e) => {
+      const t = b.dataset.type;
+      // Ensure reset path always executes the explicit reset logic defined in toggleType
+      toggleType(t);
+    });
+    const t = b.dataset.type;
+    if(t && (t in state)) b.classList.toggle('active', state[t]);
+  });
+
+  // Destination dropdown handler
+  const destSelect = document.getElementById('destination-select');
+  if(destSelect){
+    destSelect.addEventListener('change', function() {
+      destinationLocation = this.value || null;
+      // when the user changes destination we want immediate refresh
+      updateAllCells();
+    });
+  }
+
+  // Clear destination button
+  const clearBtn = document.getElementById('clear-destination');
+  if(clearBtn){
+    clearBtn.addEventListener('click', function() {
+      destinationLocation = null;
+      const destEl = document.getElementById('destination-select');
+      if(destEl) destEl.value = '';
+      // ensure UI updates immediately
+      updateAllCells();
+    });
+  }
+
+  // Safety: ensure clicking the Reset UI button (data-type="reset") also triggers the same reset and refresh
+  const resetBtn = document.querySelector('button[data-type="reset"]');
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(e){
+      // perform the same reset action (toggleType handles clearing destination and refreshing)
+      toggleType('reset');
+    });
+  }
+
+  updateAllCells();
+  updateButtonTexts();
+});
+</script>
+
+<style>
+.buttons-container{text-align:center;}
+.buttons-row{display:inline-flex; flex-wrap:wrap; justify-content:center; margin:5px 0;}
+.btn{margin:3px 5px; padding:8px 15px; border-radius:6px; border:none; cursor:pointer; font-weight:500; transition:all 0.2s;}
+.btn.active{opacity:1;}
+</style>
+
+</main>
+<div id="demo-auth-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth&&DemoAuth.renderFooter('#demo-auth-footer'));</script>
+</body>
+</html>

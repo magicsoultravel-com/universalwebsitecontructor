@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holiday Planner2 — UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+</head>
+<body>
+<main class="container">
+<h1>Holiday Planner2</h1>
+<p class="demo-note">Static demo page.</p>
+
+                <a href="#" class="hp-back-link">â† Back to Dossiers</a>
+                <h3>Dossier: </h3>
+                <ul>
+                    <li><strong>Departure:</strong> </li>
+                    <li><strong>Return:</strong> </li>
+                    <li><strong>Destination:</strong> </li>
+                    
+                        <li><strong>Additional Destinations:</strong> </li>
+                    
+                    <li><strong>Leaving From:</strong> </li>
+                    <li><strong>Created:</strong> </li>
+                </ul>
+                <button class="hp-edit-btn" data-dossier-id="">âœŽ Edit</button>
+
+                <h4>Notes</h4>
+                <textarea id="notes-" rows="6" style="width:100%;"></textarea><br>
+                <button onclick="saveNotes('')">Save Notes</button>
+                <span id="notes-status-"></span>
+                
+                <a href="#" class="hp-back-link">â† Back to Dossier</a>
+                <h3>Edit: </h3>
+                <form id="hp-edit-form">
+                    <input type="hidden" name="dossier_id" value="">
+                    <label>Trip Name:</label><br>
+                    <input type="text" name="trip_name" value="" required><br><br>
+                    <label>Departure Date:</label><br>
+                    <input type="date" name="departure_date" value="" required><br><br>
+                    <label>Return Date:</label><br>
+                    <input type="date" name="return_date" value="" required><br><br>
+                    <label>Destination:</label><br>
+                    <input type="text" name="destination" value="" required><br><br>
+                    <label>Additional Destinations:</label><br>
+                    <input type="text" name="additional_destinations" value=""><br><br>
+                    <label>Leaving From:</label><br>
+                    <input type="text" name="leaving_from" value=""><br><br>
+                    <button type="submit">Save</button>
+                    <button type="button" id="hp-cancel-edit">Cancel</button>
+                </form>
+                
+<section id="hp-module-container">
+    <h2>Holiday Planner</h2>
+    
+        <p>Please log in.</p>
+    
+        <div id="hp-main-view">
+            <p style="color:red;"></p>
+            <p style="color:green;">Dossier created!</p>
+
+            <h3>Your Dossiers</h3>
+            
+            <br><br>
+            <h3>Create New Dossier</h3>
+            <form action="" method="POST">
+                <label>Trip Name:</label><br><input type="text" name="trip_name" required><br><br>
+                <label>Departure Date:</label><br><input type="date" name="departure_date" required><br><br>
+                <label>Return Date:</label><br><input type="date" name="return_date" required><br><br>
+                <label>Destination:</label><br><input type="text" name="destination" required><br><br>
+                <label>Additional Destinations:</label><br><input type="text" name="additional_destinations"><br><br>
+                <label>Leaving From:</label><br><input type="text" name="leaving_from"><br><br>
+                <button type="submit">Create</button>
+            </form>
+        </div>
+        <div id="hp-dossier-view-container" style="display:none;"></div>
+    
+</section>
+
+<script>
+(function() {
+    const mainView = document.querySelector('#hp-main-view');
+    const view = document.querySelector('#hp-dossier-view-container');
+    const links = document.querySelectorAll('.hp-dossier-link');
+    const ajaxUrl = "?ajax=true";
+
+    const showMain = () => { mainView.style.display='block'; view.style.display='none'; view.innerHTML=''; };
+
+    const showDossier = async id => {
+        mainView.style.display='none'; view.style.display='block'; view.innerHTML='<p>Loading...</p>';
+        const resp = await fetch(`${ajaxUrl}&view_dossier=${id}`); view.innerHTML = await resp.text();
+        bindViewEvents(id);
+    };
+
+    const showEdit = async id => {
+        view.innerHTML='<p>Loading edit form...</p>';
+        const resp = await fetch(`${ajaxUrl}&edit_dossier=${id}`); view.innerHTML = await resp.text();
+        bindEditEvents(id);
+    };
+
+    const bindViewEvents = id => {
+        const back = view.querySelector('.hp-back-link');
+        if (back) back.addEventListener('click', e=>{e.preventDefault();showMain();});
+        const edit = view.querySelector('.hp-edit-btn');
+        if (edit) edit.addEventListener('click', e=>{e.preventDefault();showEdit(id);});
+    };
+
+    const bindEditEvents = id => {
+        const cancel = view.querySelector('#hp-cancel-edit');
+        if (cancel) cancel.addEventListener('click', e=>{e.preventDefault();showDossier(id);});
+        const form = view.querySelector('#hp-edit-form');
+        if (form) form.addEventListener('submit', async e=>{
+            e.preventDefault();
+            const fd=new FormData(form); fd.append('save_dossier','1');
+            const resp=await fetch(ajaxUrl,{method:'POST',body:fd});
+            view.innerHTML=await resp.text();
+            setTimeout(()=>showDossier(id),1000);
+        });
+    };
+
+    links.forEach(l=>l.addEventListener('click',e=>{e.preventDefault();showDossier(l.dataset.dossierId);}));
+
+    // --- Notes save function ---
+    window.saveNotes = async function(dossierId){
+        const textarea = document.getElementById('notes-' + dossierId);
+        const content = textarea.value;
+        const status = document.getElementById('notes-status-' + dossierId);
+        status.textContent = 'Saving...';
+        try {
+            const fd = new FormData();
+            fd.append('save_notes','1');
+            fd.append('dossier_id', dossierId);
+            fd.append('content', content);
+            const resp = await fetch(ajaxUrl,{method:'POST',body:fd});
+            const data = await resp.json();
+            if(data.status==='OK'){
+                status.textContent='Saved!';
+            } else {
+                status.textContent='Save failed: '+(data.message||'');
+            }
+        } catch(e){
+            status.textContent='Save failed';
+        }
+    };
+})();
+</script>
+
+
+</main>
+<div id="demo-auth-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth&&DemoAuth.renderFooter('#demo-auth-footer'));</script>
+</body>
+</html>

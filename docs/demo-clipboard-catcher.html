@@ -1,0 +1,542 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clipboard Catcher — UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+</head>
+<body>
+<main class="container">
+<h1>Clipboard Catcher</h1>
+<p class="demo-note">Static demo page.</p>
+
+
+    <h2>Clipboard Catcher</h2>
+
+    
+        <p>You are viewing the admin's clipboard in read-only mode. <a href="/login">Log in</a> to upload your own files.</p>
+    
+        <div style="margin-bottom:10px;">
+            <button id="paste-button" class="modal-button">Paste Clipboard Content</button>
+            <span id="status-line" style="margin-left:10px; font-style:italic; color:#ccc;"></span>
+        </div>
+    
+
+        <div id="preview-container" style="margin-bottom:20px;"></div>
+
+        <h3>Uploaded Files:</h3>
+        <table id="files-table">
+            <thead>
+            <tr>
+                <th data-sort="title">Title <span class="sort-icon"></span></th>
+                <th data-sort="description">Description <span class="sort-icon"></span></th>
+                <th data-sort="type">Type <span class="sort-icon"></span></th>
+                <th data-sort="size">Size <span class="sort-icon"></span></th>
+                <th data-sort="mtime" class="sorted-asc">Date <span class="sort-icon">â–¼</span></th>
+                
+                    <th>Actions</th>
+                
+            </tr>
+            </thead>
+            <tbody id="files-tbody"></tbody>
+        </table>
+        
+        <div id="pagination-controls" style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
+            <div id="pagination-info"></div>
+            <div id="pagination-buttons"></div>
+        </div>
+
+
+<style>
+    th[data-sort] {
+        cursor: pointer;
+        user-select: none;
+    }
+    .sort-icon {
+        display: inline-block;
+        width: 1em;
+    }
+    .pagination-btn {
+        padding: 5px 10px;
+        margin: 0 2px;
+        border: 1px solid #ccc;
+        background: #f5f5f5;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+    .pagination-btn.active {
+        background: #0073aa;
+        color: white;
+        border-color: #0073aa;
+    }
+    .pagination-btn:hover:not(.active) {
+        background: #e5e5e5;
+    }
+</style>
+<script>
+(() => {
+    const ajaxUrl = '?ajax=1';
+    const pasteBtn = document.getElementById('paste-button');
+    const filesTable = document.getElementById('files-table');
+    const tbody = document.getElementById('files-tbody');
+    const preview = document.getElementById('preview-container');
+    const statusLine = document.getElementById('status-line');
+    const paginationInfo = document.getElementById('pagination-info');
+    const paginationButtons = document.getElementById('pagination-buttons');
+    const loggedIn = ;
+
+    // In-memory data store for sorting and pagination
+    let allFiles = [];
+    let sortKey = 'mtime';
+    let sortDirection = 'desc';
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    function setStatus(msg) {
+        if (!statusLine) return;
+        statusLine.textContent = msg || '';
+    }
+
+    function formatDate(timestamp) {
+        const date = new Date(timestamp * 1000);
+        const yyyy = date.getFullYear().toString();
+        const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+        const dd = date.getDate().toString().padStart(2, '0');
+        const hh = date.getHours().toString().padStart(2, '0');
+        const min = date.getMinutes().toString().padStart(2, '0');
+        return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+    }
+
+    function renderRows() {
+        const sortedFiles = [...allFiles].sort((a, b) => {
+            let valA = a[sortKey];
+            let valB = b[sortKey];
+            if (sortKey === 'title' || sortKey === 'type' || sortKey === 'description') {
+                return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else {
+                return sortDirection === 'asc' ? valA - valB : valB - valA;
+            }
+        });
+
+        // Calculate pagination
+        const totalPages = Math.ceil(sortedFiles.length / itemsPerPage);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, sortedFiles.length);
+        const pageFiles = sortedFiles.slice(startIndex, endIndex);
+
+        // Render files for current page
+        tbody.innerHTML = pageFiles.map(f => `
+            <tr data-filename="${escapeHtml(f.filename)}" data-url="${escapeHtml(f.url)}" data-ext="${escapeHtml(f.ext)}" data-thumb="${escapeHtml(f.thumb_url || '')}" data-is-image="${f.is_image ? 'true' : 'false'}">
+                <td>
+                    ${f.is_image && f.thumb_url ? `<img src="${f.thumb_url}" alt="${escapeHtml(f.title)}" style="width:30px;height:30px;object-fit:cover;margin-right:5px;vertical-align:middle;">` : ''}
+                    <a href="${escapeHtml(f.url)}" target="_blank" class="btn-open-link">${escapeHtml(f.title)}</a>
+                </td>
+                <td>${escapeHtml(f.description)}</td>
+                <td>${escapeHtml(f.type)}</td>
+                <td>${escapeHtml(f.size_human)}</td>
+                <td>${formatDate(f.mtime)}</td>
+                ${loggedIn ? `
+                <td>
+                    <button class="modal-button btn-edit">Edit</button>
+                    <button class="modal-button btn-rename">Rename</button>
+                    <button class="modal-button btn-delete">Delete</button>
+                </td>
+                ` : ''}
+            </tr>
+        `).join('');
+
+        // Render pagination controls
+        renderPaginationControls(sortedFiles.length, totalPages);
+    }
+
+    function renderPaginationControls(totalItems, totalPages) {
+        if (totalItems <= itemsPerPage) {
+            paginationInfo.innerHTML = `Showing all ${totalItems} files`;
+            paginationButtons.innerHTML = '';
+            return;
+        }
+
+        const startItem = (currentPage - 1) * itemsPerPage + 1;
+        const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+        paginationInfo.innerHTML = `Showing ${startItem}-${endItem} of ${totalItems} files`;
+
+        let buttonsHTML = '';
+        
+        // Previous button
+        if (currentPage > 1) {
+            buttonsHTML += `<button class="pagination-btn" data-page="${currentPage - 1}">Previous</button>`;
+        }
+
+        // Page buttons
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            buttonsHTML += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+        }
+
+        // Next button
+        if (currentPage < totalPages) {
+            buttonsHTML += `<button class="pagination-btn" data-page="${currentPage + 1}">Next</button>`;
+        }
+
+        paginationButtons.innerHTML = buttonsHTML;
+
+        // Add event listeners to pagination buttons
+        paginationButtons.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentPage = parseInt(btn.dataset.page);
+                renderRows();
+            });
+        });
+    }
+
+    function escapeHtml(s) {
+        return (s + '').replace(/[&<>"']/g, m => (
+            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]
+        ));
+    }
+
+    async function refreshList() {
+        try {
+            const res = await fetch(ajaxUrl, { method: 'GET', credentials: 'same-origin' });
+            const data = await res.json();
+            if (data.success) {
+                allFiles = data.files;
+                currentPage = 1; // Reset to first page when refreshing
+                renderRows();
+            } else {
+                setStatus('Failed to load files: ' + (data.error || ''));
+            }
+        } catch (err) {
+            setStatus('Error fetching files.');
+            console.error(err);
+        }
+    }
+
+    filesTable.querySelector('thead').addEventListener('click', (e) => {
+        const th = e.target.closest('th[data-sort]');
+        if (!th) return;
+        const newSortKey = th.dataset.sort;
+        if (newSortKey === sortKey) {
+            sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            sortKey = newSortKey;
+            sortDirection = 'asc';
+        }
+        filesTable.querySelectorAll('th[data-sort]').forEach(header => {
+            header.classList.remove('sorted-asc', 'sorted-desc');
+            header.querySelector('.sort-icon').textContent = '';
+        });
+        th.classList.add('sorted-' + sortDirection);
+        th.querySelector('.sort-icon').textContent = sortDirection === 'asc' ? 'â–²' : 'â–¼';
+        renderRows();
+    });
+
+    if (loggedIn) {
+        tbody.addEventListener('click', async (e) => {
+            const tr = e.target.closest('tr');
+            if (!tr) return;
+            const filename = tr.dataset.filename;
+            const url = tr.dataset.url;
+            const ext = tr.dataset.ext;
+            const thumbUrl = tr.dataset.thumb;
+            const isImage = tr.dataset.isImage === 'true';
+
+            if (e.target.classList.contains('btn-delete')) {
+                if (!confirm(`Delete "${filename}"?`)) return;
+                const fd = new FormData();
+                fd.append('deleteFile', filename);
+                const res = await fetch(ajaxUrl, { method: 'POST', body: fd, credentials: 'same-origin' });
+                const data = await res.json();
+                if (data.success) {
+                    setStatus('Deleted.');
+                    await refreshList();
+                    preview.innerHTML = '';
+                } else {
+                    setStatus('Delete failed: ' + (data.error || ''));
+                }
+            }
+
+            if (e.target.classList.contains('btn-open-link')) {
+                e.preventDefault();
+                const fileData = allFiles.find(f => f.filename === filename);
+                if (!fileData) return;
+
+                if (fileData.ext === 'txt') {
+                    const txt = await fetch(fileData.url, { credentials: 'same-origin' }).then(r => r.text());
+                    preview.innerHTML = `<textarea data-name="${escapeHtml(fileData.filename)}" style="width:100%;height:220px;">${escapeHtml(txt)}</textarea>`;
+                } else if (isImage) {
+                    // Display full-size image directly with "Open in new tab" button
+                    const fullImageSrc = fileData.url;
+
+                    preview.innerHTML = `
+                        <div style="border:1px solid #ccc; padding:10px; text-align:center;">
+                            <img src="${fullImageSrc}" alt="${escapeHtml(fileData.title)}" id="preview-image" style="max-width:100%;max-height:300px;display:block;margin:auto;">
+                            <div style="margin-top:8px;">
+                                <a href="${fullImageSrc}" target="_blank" class="modal-button">Open in new tab</a>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            if (e.target.classList.contains('btn-edit')) {
+                const fileData = allFiles.find(f => f.filename === filename);
+                if (!fileData) { setStatus('File data not found.'); return; }
+
+                preview.innerHTML = `
+                    <div style="border:1px solid #ccc; padding:10px; margin-top:10px;">
+                        <h4>Edit File Metadata</h4>
+                        <label>
+                            Title:
+                            <input type="text" id="edit-title" value="${escapeHtml(fileData.title)}" style="width:100%; box-sizing:border-box;">
+                        </label>
+                        <br><br>
+                        <label>
+                            Description:
+                            <textarea id="edit-description" style="width:100%;height:100px; box-sizing:border-box;">${escapeHtml(fileData.description)}</textarea>
+                        </label>
+                        <br><br>
+                        <label>
+                            <input type="checkbox" id="edit-visible" ${fileData.visible_to_unlogged ? 'checked' : ''}>
+                            Visible to unlogged users
+                        </label>
+                        <div style="margin-top:10px;">
+                            <button id="btn-save-meta" class="modal-button">Save</button>
+                            <button id="btn-cancel-edit" class="modal-button">Cancel</button>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('btn-cancel-edit').onclick = () => preview.innerHTML = '';
+                document.getElementById('btn-save-meta').onclick = async () => {
+                    const newTitle = document.getElementById('edit-title').value;
+                    const newDescription = document.getElementById('edit-description').value;
+                    const newVisible = document.getElementById('edit-visible').checked;
+                    
+                    // Update the metadata.
+                    const editFd = new FormData();
+                    editFd.append('action', 'editMetadata');
+                    editFd.append('filename', fileData.filename);
+                    editFd.append('title', newTitle);
+                    editFd.append('description', newDescription);
+                    editFd.append('visible_to_unlogged', newVisible.toString());
+                    
+                    const editRes = await fetch(ajaxUrl, { method: 'POST', body: editFd, credentials: 'same-origin' });
+                    const editData = await editRes.json();
+                    
+                    if (editData.success) {
+                        setStatus('Metadata updated âœ…');
+                        preview.innerHTML = '';
+                        await refreshList();
+                    } else {
+                        setStatus('Failed to update metadata âŒ: ' + (data.error || ''));
+                    }
+                };
+            }
+
+            if (e.target.classList.contains('btn-rename')) {
+                const fileData = allFiles.find(f => f.filename === filename);
+                if (!fileData) { setStatus('File data not found.'); return; }
+
+                const currentName = fileData.filename;
+                const baseName = currentName.substring(0, currentName.lastIndexOf('.'));
+                const extension = currentName.substring(currentName.lastIndexOf('.') + 1);
+
+                preview.innerHTML = `
+                    <div style="border:1px solid #ccc; padding:10px; margin-top:10px;">
+                        <h4>Rename File</h4>
+                        <label>
+                            New Filename (without extension):
+                            <input type="text" id="rename-filename" value="${escapeHtml(baseName)}" style="width:100%; box-sizing:border-box;">
+                        </label>
+                        <div style="margin-top:10px;">
+                            <button id="btn-save-rename" class="modal-button">Rename</button>
+                            <button id="btn-cancel-rename" class="modal-button">Cancel</button>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('btn-cancel-rename').onclick = () => preview.innerHTML = '';
+                document.getElementById('btn-save-rename').onclick = async () => {
+                    const newBaseName = document.getElementById('rename-filename').value;
+                    const newFilename = newBaseName + '.' + extension;
+                    
+                    if (newFilename === currentName) {
+                        setStatus('Filename unchanged.');
+                        preview.innerHTML = '';
+                        return;
+                    }
+
+                    const renameFd = new FormData();
+                    renameFd.append('action', 'renameFile');
+                    renameFd.append('oldName', currentName);
+                    renameFd.append('newName', newFilename);
+                    
+                    const renameRes = await fetch(ajaxUrl, { method: 'POST', body: renameFd, credentials: 'same-origin' });
+                    const renameData = await renameRes.json();
+                    
+                    if (renameData.success) {
+                        setStatus('File renamed âœ…');
+                        preview.innerHTML = '';
+                        await refreshList();
+                    } else {
+                        setStatus('Rename failed âŒ: ' + (renameData.error || ''));
+                    }
+                };
+            }
+        });
+    } else {
+        // Read-only mode for unauthenticated users
+        tbody.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('btn-open-link')) {
+                e.preventDefault();
+                const tr = e.target.closest('tr');
+                if (!tr) return;
+                const filename = tr.dataset.filename;
+                const url = tr.dataset.url;
+                const ext = tr.dataset.ext;
+                const isImage = tr.dataset.isImage === 'true';
+                
+                const fileData = allFiles.find(f => f.filename === filename);
+                if (!fileData) return;
+
+                if (fileData.ext === 'txt') {
+                    const txt = await fetch(fileData.url, { credentials: 'same-origin' }).then(r => r.text());
+                    preview.innerHTML = `<textarea readonly style="width:100%;height:220px;">${escapeHtml(txt)}</textarea>`;
+                } else if (isImage) {
+                    // Display full-size image directly with "Open in new tab" button
+                    const fullImageSrc = fileData.url;
+
+                    preview.innerHTML = `
+                        <div style="border:1px solid #ccc; padding:10px; text-align:center;">
+                            <img src="${fullImageSrc}" alt="${escapeHtml(fileData.title)}" id="preview-image" style="max-width:100%;max-height:300px;display:block;margin:auto;">
+                            <div style="margin-top:8px;">
+                                <a href="${fullImageSrc}" target="_blank" class="modal-button">Open in new tab</a>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        });
+    }
+
+    if (pasteBtn) {
+        pasteBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            preview.innerHTML = '';
+            setStatus('');
+
+            try {
+                if (navigator.clipboard.read) {
+                    const items = await navigator.clipboard.read();
+                    let handled = false;
+                    for (const item of items) {
+                        const imgType = item.types.find(t => t.startsWith('image/'));
+                        if (imgType) {
+                            const blob = await item.getType(imgType);
+                            showPreviewImage(blob);
+                            handled = true;
+                            break;
+                        }
+                    }
+                    if (!handled) {
+                        const txt = await navigator.clipboard.readText();
+                        if (txt && txt.length) {
+                            showPreviewText(txt);
+                            handled = true;
+                        }
+                    }
+                    if (!handled) setStatus('Clipboard is empty or unsupported.');
+                } else {
+                    const txt = await navigator.clipboard.readText();
+                    if (txt && txt.length) showPreviewText(txt);
+                    else setStatus('Clipboard read not supported here.');
+                }
+            } catch (err) {
+                setStatus('Clipboard read failed: ' + err);
+            }
+        });
+    }
+
+    function showPreviewText(text) {
+        preview.innerHTML = `
+            <div>
+                <textarea id="clip-text" style="width:100%;height:220px;">${escapeHtml(text)}</textarea>
+                <div style="margin-top:8px;">
+                    <button id="btn-upload-text" class="modal-button">Upload</button>
+                    <button id="btn-discard" class="modal-button">Discard</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('btn-discard').onclick = () => preview.innerHTML = '';
+        document.getElementById('btn-upload-text').onclick = async () => {
+            const val = document.getElementById('clip-text').value;
+            const fd = new FormData();
+            fd.append('clipboardText', val);
+            const res = await fetch(ajaxUrl, { method: 'POST', body: fd, credentials: 'same-origin' });
+            const data = await res.json();
+            if (data.success) {
+                setStatus('Upload successful âœ…');
+                preview.innerHTML = '';
+                await refreshList();
+            } else if (data.duplicate) {
+                setStatus('Already uploaded (duplicate).');
+            } else {
+                setStatus('Upload failed âŒ: ' + (data.error || ''));
+            }
+        };
+    }
+
+    function showPreviewImage(blob) {
+        const url = URL.createObjectURL(blob);
+        preview.innerHTML = `
+            <div>
+                <img src="${url}" alt="" style="max-width:100%;max-height:300px;display:block;">
+                <div style="margin-top:8px;">
+                    <button id="btn-upload-img" class="modal-button">Upload</button>
+                    <button id="btn-discard" class="modal-button">Discard</button>
+                </div>
+            </div>
+        `;
+        document.getElementById('btn-discard').onclick = () => {
+            URL.revokeObjectURL(url);
+            preview.innerHTML = '';
+        };
+        document.getElementById('btn-upload-img').onclick = async () => {
+            const fd = new FormData();
+            const extFromType = (blob.type && blob.type.split('/')[1]) ? blob.type.split('/')[1] : 'bin';
+            const file = new File([blob], 'clipboard.' + extFromType, { type: blob.type || 'application/octet-stream' });
+            fd.append('clipboardContent', file);
+            const res = await fetch(ajaxUrl, { method: 'POST', body: fd, credentials: 'same-origin' });
+            const data = await res.json();
+            if (data.success) {
+                setStatus('Upload successful âœ…');
+                preview.innerHTML = '';
+                URL.revokeObjectURL(url);
+                await refreshList();
+            } else if (data.duplicate) {
+                setStatus('Already uploaded (duplicate).');
+            } else {
+                setStatus('Upload failed âŒ: ' + (data.error || ''));
+            }
+        };
+    }
+
+    // Initial refresh to get data and render
+    refreshList();
+})();
+</script>
+</main>
+<div id="demo-auth-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth&&DemoAuth.renderFooter('#demo-auth-footer'));</script>
+</body>
+</html>

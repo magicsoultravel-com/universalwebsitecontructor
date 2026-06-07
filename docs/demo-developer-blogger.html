@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Developer Blogger â€” UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+<script src="assets/js/demo-data.js" defer></script>
+</head>
+<body>
+<main class="container">
+<h1>Developer Blogger</h1>
+<p class="demo-note">Login as demo admin to add posts (saved in browser).</p>
+<div id="dev-blogger-admin" style="display:none"><button id="dev-blogger-add">Add Post</button></div>
+<div id="dev-blogger-root"></div>
+</main>
+<div id="demo-auth-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth.renderFooter('#demo-auth-footer'));</script>
+</body>
+</html>

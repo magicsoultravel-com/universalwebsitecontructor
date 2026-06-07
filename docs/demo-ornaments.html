@@ -1,0 +1,396 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ornamental Lines</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* Previous styles... */
+
+        /* Simple Decorative Line */
+        .decorative-line {
+            position: relative;
+            text-align: center;
+        }
+        .decorative-line::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #ccc;
+        }
+        .decorative-line span {
+            background-color: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Double Line */
+        .double-line {
+            position: relative;
+            text-align: center;
+        }
+        .double-line::before {
+            content: "";
+            position: absolute;
+            top: 45%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #ccc;
+        }
+        .double-line::after {
+            content: "";
+            position: absolute;
+            top: 55%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #ccc;
+        }
+        .double-line span {
+            background-color: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Dotted Line */
+        .dotted-line {
+            position: relative;
+            text-align: center;
+        }
+        .dotted-line::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            border-top: 1px dotted #ccc;
+        }
+        .dotted-line span {
+            background-color: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Gradient Line */
+        .gradient-line {
+            position: relative;
+            text-align: center;
+        }
+        .gradient-line::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-image: linear-gradient(to right, #ccc, #fff);
+        }
+        .gradient-line span {
+            background-color: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* New styles... */
+
+        /* Floral Line */
+        .floral-line {
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .floral-line::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath d='M50 10c-10 0-20 5-20 10s10 10 20 10 20-5 20-10-10-10-20-10z' fill='%23ccc'/%3E%3C/svg%3E");
+            background-size: 50px 20px;
+            background-repeat: repeat-x;
+        }
+        .floral-line span {
+            background-color: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Scrolling Line */
+        .scrolling-line {
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .scrolling-line::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-image: linear-gradient(to right, #ccc 50%, transparent 50%);
+            background-size: 20px 2px;
+            background-repeat: repeat-x;
+            animation: scroll 10s linear infinite;
+        }
+        @keyframes scroll {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 100% 0;
+            }
+        }
+        .scrolling-line span {
+            background-color: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Fancy Line */
+        .fancy-line {
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .fancy-line::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-image: linear-gradient(to right, #ccc, #fff, #ccc);
+        }
+        .fancy-line span {
+            background-color: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Ornamental Line */
+        .ornamental-line {
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .ornamental-line::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 40%;
+            height: 1px;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+        .ornamental-line::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 40%;
+            height: 1px;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+        .ornamental-line span {
+            background-color: #fff;
+            padding: 0 10px;
+            position: relative;
+            z-index: 1;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* New ornamental lines */
+        .ornamental-floral-line {
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .ornamental-floral-line::before,
+        .ornamental-floral-line::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 20px;
+            background-size: auto 20px;
+            background-repeat: no-repeat;
+        }
+        .ornamental-floral-line::before {
+            left: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath d='M0 10s20 10 50 0 50-10 50 0' fill='none' stroke='%23bbb' stroke-width='2'/%3E%3Ccircle cx='50' cy='10' r='3' fill='%23bbb'/%3E%3C/svg%3E");
+            background-position: left center;
+        }
+        .ornamental-floral-line::after {
+            right: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20'%3E%3Cpath d='M100 10s-20 10-50 0-50-10-50 0' fill='none' stroke='%23bbb' stroke-width='2'/%3E%3Ccircle cx='50' cy='10' r='3' fill='%23bbb'/%3E%3C/svg%3E");
+            background-position: right center;
+        }
+        .ornamental-floral-line span {
+            background-color: #fff;
+            padding: 0 15px;
+            position: relative;
+            z-index: 1;
+            font-size: 1.5rem;
+            font-style: italic;
+            color: #555;
+        }
+
+        .classic-divider {
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .classic-divider::before,
+        .classic-divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            height: 1px;
+            background-color: #ccc;
+            width: calc(50% - 30px);
+        }
+        .classic-divider::before {
+            left: 0;
+        }
+        .classic-divider::after {
+            right: 0;
+        }
+        .classic-divider span {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23888' stroke-width='2'/%3E%3Cpath d='M50 10v80M10 50h80' stroke='%23888' stroke-width='2'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #fff;
+        }
+        .classic-divider span:empty {
+            width: 60px;
+            height: 60px;
+            padding: 0;
+        }
+
+        .leaf-divider {
+            position: relative;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .leaf-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10'%3E%3Cpath d='M0 5 L10 0 L20 5 L30 0 L40 5 L50 0 L60 5 L70 0 L80 5 L90 0 L100 5' fill='none' stroke='%23aaa' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-size: 50px 10px;
+            background-repeat: repeat-x;
+        }
+        .leaf-divider span {
+            background-color: #f0f0f0;
+            padding: 0 15px;
+            position: relative;
+            z-index: 1;
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: bold;
+        }
+    </style>
+<script src="assets/js/demo-auth.js" defer></script></head>
+<body>
+    <div class="container">
+        <h1>Ornamental Lines</h1>
+
+        <h2>Simple Decorative Line</h2>
+        <div class="decorative-line"><span>Simple Decorative Line</span></div>
+        <hr>
+
+        <h2>Double Line</h2>
+        <div class="double-line"><span>Double Line</span></div>
+        <hr>
+
+        <h2>Dotted Line</h2>
+        <div class="dotted-line"><span>Dotted Line</span></div>
+        <hr>
+
+        <h2>Gradient Line</h2>
+        <div class="gradient-line"><span>Gradient Line</span></div>
+        <hr>
+
+        <h2>Floral Line (from original)</h2>
+        <div class="floral-line"><span>Floral Line</span></div>
+        <hr>
+
+        <h2>Scrolling Line</h2>
+        <div class="scrolling-line"><span>Scrolling Line</span></div>
+        <hr>
+
+        <h2>Fancy Line</h2>
+        <div class="fancy-line"><span>Fancy Line</span></div>
+        <hr>
+
+        <h2>Ornamental Line</h2>
+        <div class="ornamental-line"><span>Ornamental Line</span></div>
+        <hr>
+
+        <br>
+        <br>
+        <hr>
+        <h2>New, more detailed lines</h2>
+        <hr>
+        <br>
+        <br>
+
+        <h2>Ornate Floral Line</h2>
+        <div class="ornamental-floral-line"><span>New Ornate Line</span></div>
+        <hr>
+
+        <h2>Classic Centered Divider</h2>
+        <div class="classic-divider"><span></span></div>
+        <hr>
+
+        <h2>Leafy Pattern Line</h2>
+        <div class="leaf-divider"><span>Leafy Divider</span></div>
+        <hr>
+    </div>
+<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+</html>

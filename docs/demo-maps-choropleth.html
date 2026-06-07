@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maps Choropleth — UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+</head>
+<body>
+<main class="container">
+<h1>Maps Choropleth</h1>
+<p class="demo-note">Static demo — loads JSON + GeoJSON from CDN.</p>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<div id="choropleth-container" style="max-width:960px;margin:0 auto;padding:1rem;">
+    <h2 style="text-align:center;margin-bottom:0.5rem;">Choropleth Demo</h2>
+    <div id="choropleth-legend" style="margin-bottom:1rem;font-size:0.9rem;"></div>
+    <div id="choropleth-map" style="height:600px;border:1px solid #ccc;border-radius:4px;"></div>
+</div>
+
+<script>
+const JSON_DATA_PATH  = "assets/data/maps-choropleth.json";
+const GEOJSON_DATA_URL = "https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson";
+
+let mapData = {};
+let geoJsonLayer;
+let map;
+
+function getColorForCountry(name){
+    if(!mapData.mapGroups) return null;
+    for(const g of mapData.mapGroups){
+        if(g.countries.includes(name)) return g.color;
+    }
+    return null;
+}
+
+function styleFeature(feature){
+    const name = feature.properties.ADMIN || feature.properties.name;
+    const c = getColorForCountry(name);
+    return {
+        fillColor: c || '#f2f2f2',
+        weight: 1,
+        color: '#666',
+        fillOpacity: c ? 0.85 : 0.7
+    };
+}
+
+function onEachFeature(feature, layer){
+    const name = feature.properties.ADMIN || feature.properties.name;
+    layer.bindPopup(name);
+    layer.on({
+        mouseover: e=>{
+            e.target.setStyle({weight:2,color:'#333',fillOpacity:0.9});
+            e.target.bringToFront();
+        },
+        mouseout: e=>{
+            geoJsonLayer.resetStyle(e.target);
+        },
+        click: e=>{
+            map.fitBounds(e.target.getBounds(),{padding:[10,10]});
+        }
+    });
+}
+
+function buildLegend(){
+    const div = document.getElementById('choropleth-legend');
+    if(!mapData.mapGroups) return;
+    let html = '';
+    mapData.mapGroups.forEach(g=>{
+        html += `<div style="display:flex;align-items:center;margin-bottom:4px;">
+        <div style="width:16px;height:16px;background:${g.color};border:1px solid #999;margin-right:6px;"></div>${g.name}
+        </div>`;
+    });
+    html += `<div style="display:flex;align-items:center;margin-top:6px;">
+    <div style="width:16px;height:16px;background:#f2f2f2;border:1px solid #999;margin-right:6px;"></div>Other countries
+    </div>`;
+    div.innerHTML = html;
+}
+
+async function init(){
+    map = L.map('choropleth-map',{center:[20,0],zoom:2,worldCopyJump:true});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        attribution:'Â© OpenStreetMap'
+    }).addTo(map);
+
+    const [jsonRes, geoRes] = await Promise.all([
+        fetch(JSON_DATA_PATH),
+        fetch(GEOJSON_DATA_URL)
+    ]);
+
+    mapData = await jsonRes.json();
+    buildLegend();
+    const geoJsonData = await geoRes.json();
+
+    // remove Antarctica
+    geoJsonData.features = geoJsonData.features.filter(f=>{
+        const nm = f.properties.ADMIN || f.properties.name;
+        return nm !== 'Antarctica';
+    });
+
+    geoJsonLayer = L.geoJSON(geoJsonData,{
+        style: styleFeature,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+}
+
+window.addEventListener('load', init);
+</script>
+
+</main>
+<div id="demo-auth-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth&&DemoAuth.renderFooter('#demo-auth-footer'));</script>
+</body>
+</html>

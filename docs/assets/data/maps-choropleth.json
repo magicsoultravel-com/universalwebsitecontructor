@@ -1,0 +1,52 @@
+{
+    "mapGroups": [
+        {
+            "color": "#00FFFF",
+            "name": "Turquoise Highlight Group",
+            "countries": [
+                "Ireland",
+                "Finland",
+                "Romania",
+                "Bulgaria",
+                "Austria",
+                "India",
+                "Russia", 
+                "Canada"
+            ]
+        },
+        {
+            "color": "#FF00FF",
+            "name": "Pink Focus Group",
+            "countries": [
+                "Denmark"
+            ]
+        },
+        {
+            "color": "#00FF00",
+            "name": "Pure Green Focus Group",
+            "countries": [
+                "Portugal",
+                "Spain",
+                "France",
+                "Belgium",
+                "Netherlands",
+                "Germany",
+                "Italy",
+                "Latvia",
+                "Lithuania",
+                "Greece",
+                "Turkey",
+                "Qatar",
+                "United Arab Emirates",
+                "Mexico",
+                "Thailand",
+                "Egypt",
+                "Barbados", 
+                "Saint Lucia", 
+                "United Kingdom",
+                "Czechia", 
+                "Slovakia" 
+            ]
+        }
+    ]
+}

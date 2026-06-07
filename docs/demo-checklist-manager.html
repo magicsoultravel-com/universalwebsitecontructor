@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist Manager — UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+</head>
+<body>
+<main class="container">
+<h1>Checklist Manager</h1>
+<p class="demo-note">Static demo — lists saved in your browser (localStorage).</p>
+<div id="cl-root"></div>
+<button type="button" id="cl-new">New checklist</button>
+</main>
+<div id="demo-auth-footer"></div>
+<script>
+const KEY = 'uwec-checklists';
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || { lists: [] }; }
+  catch { return { lists: [] }; }
+}
+function save(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
+function esc(s) { const e = document.createElement('span'); e.textContent = s ?? ''; return e.innerHTML; }
+function render() {
+  const data = load();
+  const root = document.getElementById('cl-root');
+  root.innerHTML = data.lists.map((list, li) => `
+    <section style="margin:16px 0;padding:16px;background:#1a1a1a;border-radius:12px;text-align:left">
+      <h3>${esc(list.name)} <button type="button" data-del-list="${li}" style="font-size:0.7em">Delete</button></h3>
+      <ul style="list-style:none;padding:0">
+        ${(list.items||[]).map((item, ii) => `
+          <li style="margin:6px 0">
+            <label><input type="checkbox" data-li="${li}" data-ii="${ii}" ${item.done?'checked':''}> ${esc(item.text)}</label>
+            <button type="button" data-del-item="${li}-${ii}" style="font-size:0.7em">×</button>
+          </li>`).join('')}
+      </ul>
+      <input type="text" placeholder="Add item…" data-add="${li}" style="width:60%">
+      <button type="button" data-add-btn="${li}">Add</button>
+    </section>`).join('') || '<p>No checklists yet.</p>';
+  root.querySelectorAll('[data-del-list]').forEach(b => b.onclick = () => {
+    const d = load(); d.lists.splice(+b.dataset.delList, 1); save(d); render();
+  });
+  root.querySelectorAll('[data-del-item]').forEach(b => b.onclick = () => {
+    const [li, ii] = b.dataset.delItem.split('-').map(Number);
+    const d = load(); d.lists[li].items.splice(ii, 1); save(d); render();
+  });
+  root.querySelectorAll('input[type=checkbox][data-li]').forEach(cb => cb.onchange = () => {
+    const d = load();
+    d.lists[+cb.dataset.li].items[+cb.dataset.ii].done = cb.checked;
+    save(d);
+  });
+  root.querySelectorAll('[data-add-btn]').forEach(b => b.onclick = () => {
+    const input = root.querySelector(`input[data-add="${b.dataset.addBtn}"]`);
+    const text = input.value.trim(); if (!text) return;
+    const d = load(); d.lists[+b.dataset.addBtn].items.push({ text, done: false });
+    save(d); render();
+  });
+}
+document.getElementById('cl-new').onclick = () => {
+  const name = prompt('Checklist name'); if (!name) return;
+  const d = load(); d.lists.push({ name, items: [] }); save(d); render();
+};
+document.addEventListener('DOMContentLoaded', () => {
+  const seed = load();
+  if (!seed.lists.length) {
+    fetch('assets/data/checklists.json').then(r => r.json()).then(j => {
+      if (j.lists) { save({ lists: j.lists.map(l => ({ name: l.name, items: (l.items||[]).map(i => ({ text: i.name || i.text || 'item', done: !!i.done })) })) }); }
+      render();
+    }).catch(render);
+  } else render();
+  DemoAuth.renderFooter('#demo-auth-footer');
+});
+</script>
+</body>
+</html>

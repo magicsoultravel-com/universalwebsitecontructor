@@ -1,0 +1,765 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Styles Demo</title>
+<style>
+    /* Global styles for the demo page */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        background-color: #0d1117;
+        color: #e6edf3;
+        padding: 20px;
+        line-height: 1.6;
+    }
+    .header-info {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 15px;
+        font-size: 0.8em;
+    }
+    .header-info a {
+        color: #e6edf3;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #f2f2f2;
+        border-bottom: 2px solid #2a2f3a;
+        padding-bottom: 10px;
+    }
+    .menu-container {
+        background-color: #161b22;
+        border: 1px solid #2a2f3a;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 40px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    .menu-container h2 {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #fff;
+    }
+    nav {
+        display: flex;
+        justify-content: center;
+    }
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    nav a {
+        display: inline-block;
+        padding: 10px 20px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+    footer {
+        text-align: center;
+        margin-top: 40px;
+        border-top: 1px solid #2a2f3a;
+        padding-top: 20px;
+        color: #999;
+        font-size: 0.8em;
+    }
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    .footer-links a {
+        color: #999;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    .footer-links a:hover {
+        color: #e6edf3;
+    }
+
+    /* --- Menu Specific Styles --- */
+    .classic-horizontal ul { flex-direction: row; gap: 10px; }
+    .classic-horizontal a { background-color: #333; color: #fff; }
+    .classic-horizontal a:hover { background-color: #555; }
+
+    .vertical-stack ul { flex-direction: column; align-items: center; gap: 5px; }
+    .vertical-stack a { width: 150px; text-align: center; background-color: #2a2f3a; color: #999; }
+    .vertical-stack a:hover { background-color: #3e4451; color: #fff; }
+
+    .ghost-hover a {
+        background-color: transparent; color: #fff; border: 2px solid #555;
+        position: relative; overflow: hidden;
+    }
+    .ghost-hover a:before {
+        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: #fff; transition: transform 0.5s ease; transform: scaleX(0);
+        transform-origin: right; z-index: -1;
+    }
+    .ghost-hover a:hover:before { transform: scaleX(1); transform-origin: left; }
+    .ghost-hover a:hover { color: #161b22; }
+
+    .neon-glow a {
+        background-color: transparent; color: #0ff; border: 1px solid #0ff;
+        text-shadow: 0 0 5px #0ff, 0 0 10px #0ff; box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, inset 0 0 5px #0ff;
+    }
+    .neon-glow a:hover {
+        background-color: #0ff; color: #161b22; text-shadow: none;
+        box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    }
+    .neon-glow ul { gap: 15px; }
+
+    .sliding-underline ul { flex-direction: row; gap: 30px; }
+    .sliding-underline a { position: relative; background-color: transparent; color: #fff; }
+    .sliding-underline a:after {
+        content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+        background: #fff; transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+    }
+    .sliding-underline a:hover:after { transform: scaleX(1); }
+
+    .animated-fill a {
+        position: relative; overflow: hidden; color: #fff; background-color: #333;
+        z-index: 1;
+    }
+    .animated-fill a:before {
+        content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: #0d6efd; transform: scale(0); border-radius: 50%;
+        transition: transform 0.4s ease; z-index: -1;
+    }
+    .animated-fill a:hover:before { transform: scale(2); }
+    .animated-fill a:hover { color: #fff; }
+    
+    .box-shadow-pulse a {
+        background-color: #2a2f3a; color: #fff;
+        box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+        animation: pulse-shadow 2s infinite;
+    }
+    @keyframes pulse-shadow {
+        0% { box-shadow: 0 0 0 #fff; }
+        50% { box-shadow: 0 0 15px #fff; }
+        100% { box-shadow: 0 0 0 #fff; }
+    }
+    .box-shadow-pulse a:hover { animation: none; box-shadow: 0 0 10px #fff; }
+    
+    .border-grow a {
+        background-color: transparent; color: #fff; position: relative;
+    }
+    .border-grow a:before {
+        content: ''; position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+        border: 2px solid transparent; transition: border-width 0.3s ease-out;
+        box-sizing: border-box;
+    }
+    .border-grow a:hover:before { border-width: 2px; border-color: #fff; }
+    
+    .three-d-hover a {
+        background-color: transparent; color: #fff; position: relative;
+        transform-style: preserve-3d; transition: transform 0.4s;
+    }
+    .three-d-hover a:before {
+        content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        color: #3e4451; transform: translateZ(-20px);
+    }
+    .three-d-hover a:hover { transform: rotateX(15deg); }
+
+    /* --- HAMBURGER MENU STYLES --- */
+    .menu-demo-box { position: relative; min-height: 250px; }
+    .menu-demo-box nav { position: absolute; top: 20px; left: 20px; }
+    .animated-hamburger { display: block; background-color: transparent; border: none; padding: 10px; cursor: pointer; z-index: 10; }
+    .animated-hamburger span { display: block; width: 30px; height: 3px; background-color: #fff; margin-bottom: 5px; transition: all 0.3s ease-in-out; }
+    .animated-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .animated-hamburger.active span:nth-child(2) { opacity: 0; }
+    .animated-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .animated-hamburger-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); display: flex; align-items: center; justify-content: center; transform: translateX(-100%); transition: transform 0.5s ease-in-out; z-index: 5; }
+    .animated-hamburger-menu.active { transform: translateX(0); }
+    .animated-hamburger-menu ul { flex-direction: column; gap: 15px; }
+    .animated-hamburger-menu a { font-size: 1.5em; color: #fff; text-transform: uppercase; }
+    .animated-hamburger-menu a:hover { color: #0d6efd; }
+    
+    .sliding-pane-btn { background-color: #333; color: #fff; padding: 10px 20px; border: none; cursor: pointer; }
+    .sliding-pane-container { position: fixed; top: 0; right: 0; width: 300px; height: 100%; background-color: #161b22; box-shadow: -5px 0 10px rgba(0, 0, 0, 0.5); transform: translateX(100%); transition: transform 0.5s ease-in-out; z-index: 10; padding: 20px; }
+    .sliding-pane-container.active { transform: translateX(0); }
+    .sliding-pane-container ul { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .sliding-pane-container a { width: 100%; text-align: left; background-color: #2a2f3a; color: #fff; border-radius: 4px; padding: 12px 15px; }
+    .sliding-pane-container a:hover { background-color: #3e4451; }
+
+    /* --- CREATIVE MENUS --- */
+    /* Slide-In from Bottom */
+    .slide-in-menu { position: fixed; bottom: 0; left: 0; right: 0; background-color: #333; transform: translateY(100%); transition: transform 0.5s ease-out; z-index: 5; }
+    .slide-in-menu.active { transform: translateY(0); }
+    .slide-in-menu ul { justify-content: space-around; }
+    .slide-in-menu a { padding: 15px 20px; }
+
+    /* Split-Screen Menu */
+    .split-screen-menu { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; transform: scaleX(0); transition: transform 0.5s ease; transform-origin: left; overflow: hidden; }
+    .split-screen-menu.active { transform: scaleX(1); }
+    .split-screen-menu .left-pane, .split-screen-menu .right-pane { width: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+    .split-screen-menu .left-pane { background-color: #1a1a1a; }
+    .split-screen-menu .right-pane { background-color: #2a2a2a; }
+    .split-screen-menu ul { flex-direction: column; gap: 15px; }
+    .split-screen-menu a { font-size: 1.5em; color: #fff; text-transform: uppercase; }
+
+    /* Flipping Card Menu */
+    .flipping-card-menu { perspective: 1000px; display: flex; gap: 20px; justify-content: center; }
+    .flipping-card-menu .card { width: 150px; height: 100px; transform-style: preserve-3d; transition: transform 0.6s; position: relative; cursor: pointer; }
+    .flipping-card-menu .card:hover { transform: rotateY(180deg); }
+    .flipping-card-menu .card-front, .flipping-card-menu .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; display: flex; justify-content: center; align-items: center; }
+    .flipping-card-menu .card-front { background-color: #2a2f3a; color: #fff; }
+    .flipping-card-menu .card-back { background-color: #0d6efd; color: #fff; transform: rotateY(180deg); padding: 10px; text-align: center; font-size: 0.9em; }
+
+    /* Accordion Menu */
+    .accordion-menu { width: 300px; margin: 0 auto; }
+    .accordion-menu .menu-item { border-bottom: 1px solid #2a2f3a; }
+    .accordion-menu .menu-item:last-child { border-bottom: none; }
+    .accordion-menu .menu-item-toggle { display: block; padding: 15px; background-color: #1a1a1a; color: #fff; text-decoration: none; position: relative; cursor: pointer; }
+    .accordion-menu .menu-item-toggle:after { content: '+'; position: absolute; right: 15px; transition: transform 0.3s; }
+    .accordion-menu .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+    .accordion-menu .submenu a { display: block; padding: 10px 15px 10px 30px; background-color: #222; color: #ccc; }
+    .accordion-menu .menu-item-toggle.active + .submenu { max-height: 200px; }
+    .accordion-menu .menu-item-toggle.active:after { transform: rotate(45deg); }
+    
+    /* --- NEW CREATIVE MENUS --- */
+    
+    /* Circle Burst Menu */
+    .circle-burst a {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        background-color: #333;
+        color: #fff;
+    }
+    .circle-burst a:before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 150px;
+        height: 150px;
+        background: #0d6efd;
+        border-radius: 50%;
+        transition: transform 0.4s ease-out;
+        z-index: -1;
+    }
+    .circle-burst a:hover:before {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    
+    /* Perspective Menu */
+    .perspective-menu ul {
+        display: flex;
+        justify-content: center;
+        transform-style: preserve-3d;
+        transform: rotateX(15deg);
+    }
+    .perspective-menu li {
+        transition: transform 0.5s ease-out;
+    }
+    .perspective-menu li:hover {
+        transform: translateZ(50px) translateY(-5px);
+    }
+    .perspective-menu a {
+        background-color: #2a2f3a;
+        color: #fff;
+        border: 1px solid #3e4451;
+    }
+    .perspective-menu a:hover {
+        background-color: #3e4451;
+    }
+
+    /* Glitch Menu */
+    .glitch-menu a {
+        position: relative;
+        color: #fff;
+        background: none;
+        overflow: hidden;
+        border: 2px solid #2a2f3a;
+    }
+    .glitch-menu a:before, .glitch-menu a:after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #161b22;
+        overflow: hidden;
+        transition: transform 0s;
+        animation: none;
+    }
+    .glitch-menu a:before {
+        color: #f0f;
+        left: 2px;
+        clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+    }
+    .glitch-menu a:after {
+        color: #0ff;
+        left: -2px;
+        clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+    }
+    .glitch-menu a:hover:before {
+        animation: glitch-anim-1 0.3s infinite linear alternate-reverse;
+    }
+    .glitch-menu a:hover:after {
+        animation: glitch-anim-2 0.3s infinite linear alternate-reverse;
+    }
+    @keyframes glitch-anim-1 {
+        0% { transform: translate(0, 0); }
+        33% { transform: translate(-5px, -5px); }
+        66% { transform: translate(5px, 5px); }
+        100% { transform: translate(0, 0); }
+    }
+    @keyframes glitch-anim-2 {
+        0% { transform: translate(0, 0); }
+        33% { transform: translate(5px, -5px); }
+        66% { transform: translate(-5px, 5px); }
+        100% { transform: translate(0, 0); }
+    }
+
+    /* Spotlight Menu */
+    .spotlight-menu {
+        position: relative;
+        cursor: none;
+    }
+    .spotlight-menu .spotlight {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        transition: opacity 0.3s;
+        opacity: 0;
+        z-index: 0;
+    }
+    .spotlight-menu:hover .spotlight {
+        opacity: 1;
+    }
+    .spotlight-menu a {
+        color: #999;
+        position: relative;
+        z-index: 1;
+    }
+    .spotlight-menu a:hover {
+        color: #fff;
+    }
+
+    /* Ribbon Menu */
+    .ribbon-menu a {
+        display: inline-block;
+        background: #0d6efd;
+        color: #fff;
+        padding: 10px 20px;
+        position: relative;
+        margin: 0 15px;
+        transition: all 0.3s;
+    }
+    .ribbon-menu a:before, .ribbon-menu a:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 20px;
+        height: 100%;
+        background: #0a58ca;
+        z-index: -1;
+    }
+    .ribbon-menu a:before {
+        left: -10px;
+        transform: skewX(20deg);
+    }
+    .ribbon-menu a:after {
+        right: -10px;
+        transform: skewX(-20deg);
+    }
+    .ribbon-menu a:hover {
+        transform: translateY(-3px);
+    }
+
+    /* Diagonal Menu */
+    .diagonal-menu ul {
+        display: flex;
+        flex-direction: column;
+        transform: skewX(-20deg);
+        gap: 10px;
+    }
+    .diagonal-menu a {
+        background: #0d6efd;
+        padding: 10px 20px;
+        color: #fff;
+        display: inline-block;
+        transform: skewX(20deg);
+        transition: background 0.3s;
+    }
+    .diagonal-menu a:hover {
+        background: #0a58ca;
+    }
+
+    /* Floating Menu */
+    .floating-menu a {
+        display: inline-block;
+        padding: 10px 25px;
+        background: #0d6efd;
+        color: #fff;
+        border-radius: 50px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s;
+    }
+    .floating-menu a:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Rotating Wheel Menu */
+    .rotating-wheel {
+        position: relative;
+        width: 250px;
+        height: 250px;
+        margin: 0 auto;
+        perspective: 1000px;
+    }
+    .rotating-wheel ul {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: rotate-wheel 20s infinite linear;
+    }
+    .rotating-wheel ul:hover {
+        animation-play-state: paused;
+    }
+    .rotating-wheel li {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: 0 0;
+        list-style: none;
+        margin-left: -50px;
+    }
+    .rotating-wheel li a {
+        display: block;
+        padding: 10px 20px;
+        background: #0d6efd;
+        color: #fff;
+        border-radius: 50%;
+        transform: rotateY(0deg) translateZ(120px);
+        transition: transform 0.5s;
+    }
+    .rotating-wheel li a:hover {
+        background: #0a58ca;
+        transform: rotateY(0deg) translateZ(130px);
+    }
+    /* This distributes the links in a circle */
+    .rotating-wheel li:nth-child(1) { transform: rotateY(0deg); }
+    .rotating-wheel li:nth-child(2) { transform: rotateY(51.42deg); }
+    .rotating-wheel li:nth-child(3) { transform: rotateY(102.84deg); }
+    .rotating-wheel li:nth-child(4) { transform: rotateY(154.26deg); }
+    .rotating-wheel li:nth-child(5) { transform: rotateY(205.68deg); }
+    .rotating-wheel li:nth-child(6) { transform: rotateY(257.1deg); }
+    .rotating-wheel li:nth-child(7) { transform: rotateY(308.52deg); }
+    @keyframes rotate-wheel {
+        0% { transform: rotateY(0deg); }
+        100% { transform: rotateY(360deg); }
+    }
+
+    /* Pie Menu */
+    .pie-menu {
+        position: relative;
+        width: 250px;
+        height: 250px;
+        margin: 0 auto;
+    }
+    .pie-menu ul {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    .pie-menu li {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        list-style: none;
+        transform-origin: center center;
+    }
+    .pie-menu a {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        padding: 10px;
+        transform: translate(-50%, -50%) translateY(-100px);
+        background: #0d6efd;
+        color: #fff;
+        border-radius: 50%;
+        transition: transform 0.3s;
+    }
+    .pie-menu a:hover {
+        transform: translate(-50%, -50%) translateY(-105px) scale(1.1);
+    }
+    /* Distribute menu items evenly */
+    .pie-menu li:nth-child(1) { transform: rotate(0deg); }
+    .pie-menu li:nth-child(2) { transform: rotate(51.42deg); }
+    .pie-menu li:nth-child(3) { transform: rotate(102.84deg); }
+    .pie-menu li:nth-child(4) { transform: rotate(154.26deg); }
+    .pie-menu li:nth-child(5) { transform: rotate(205.68deg); }
+    .pie-menu li:nth-child(6) { transform: rotate(257.1deg); }
+    .pie-menu li:nth-child(7) { transform: rotate(308.52deg); }
+</style>
+<script src="assets/js/demo-auth.js" defer></script></head>
+<body>
+
+<ul class="header-info">
+    <li><a href="#">LANG</a></li>
+    <li><a href="#">BLOG</a></li>
+</ul>
+
+<header>
+    <h1>Menu Styles Demo</h1>
+</header>
+<main>
+    
+        
+            <div class="menu-container">
+                <h2></h2>
+                <nav class="">
+                    
+                        <div class="spotlight"></div>
+                    
+                    <ul>
+                        
+                            <li>
+                                <a href="" data-text="">
+                                    
+                                </a>
+                            </li>
+                        
+                    </ul>
+                </nav>
+            </div>
+        
+    
+        <p>Menu data or styles not found. Please check your files.</p>
+    
+    
+    <div class="menu-container menu-demo-box">
+        <h2>Animated Hamburger</h2>
+        <button id="hamburger-btn" class="animated-hamburger">
+            <span></span><span></span><span></span>
+        </button>
+        <nav id="hamburger-menu" class="animated-hamburger-menu">
+            <ul>
+                
+                    <li><a href=""></a></li>
+                
+            </ul>
+        </nav>
+    </div>
+
+    <div class="menu-container menu-demo-box">
+        <h2>Sliding Pane Menu</h2>
+        <button id="sliding-pane-btn" class="sliding-pane-btn">Open Menu</button>
+        <div id="sliding-pane" class="sliding-pane-container">
+            <button id="close-pane-btn" class="sliding-pane-btn">Close</button>
+            <nav>
+                <ul>
+                    
+                        <li><a href=""></a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="menu-container menu-demo-box">
+        <h2>Slide-In Menu</h2>
+        <button id="slide-in-btn" class="sliding-pane-btn">Open Menu</button>
+        <nav id="slide-in-menu" class="slide-in-menu">
+            <ul>
+                
+                    <li><a href=""></a></li>
+                
+            </ul>
+        </nav>
+    </div>
+
+    <div class="menu-container menu-demo-box">
+        <h2>Split-Screen Menu</h2>
+        <button id="split-screen-btn" class="sliding-pane-btn">Open Menu</button>
+        <div id="split-screen-menu" class="split-screen-menu">
+            <div class="left-pane">
+                <h2>Explore</h2>
+                <nav>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Team</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="right-pane">
+                <h2>Categories</h2>
+                <nav>
+                    <ul>
+                        <li><a href="#">Web Dev</a></li>
+                        <li><a href="#">UI/UX</a></li>
+                        <li><a href="#">Marketing</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu-container">
+        <h2>Flipping Card Menu</h2>
+        <nav class="flipping-card-menu">
+            <div class="card">
+                <div class="card-front">Home</div>
+                <div class="card-back">Go back to the homepage.</div>
+            </div>
+            <div class="card">
+                <div class="card-front">About</div>
+                <div class="card-back">Learn more about us.</div>
+            </div>
+            <div class="card">
+                <div class="card-front">Services</div>
+                <div class="card-back">See what we offer.</div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="menu-container">
+        <h2>Accordion Menu</h2>
+        <nav class="accordion-menu">
+            <div class="menu-item">
+                <a class="menu-item-toggle" href="#">About</a>
+                <div class="submenu">
+                    <a href="#">History</a>
+                    <a href="#">Team</a>
+                    <a href="#">Mission</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a class="menu-item-toggle" href="#">Services</a>
+                <div class="submenu">
+                    <a href="#">Web Dev</a>
+                    <a href="#">Design</a>
+                    <a href="#">Marketing</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</main>
+<footer>
+    <p>&copy;  Your Website. All Rights Reserved.</p>
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+    </div>
+</footer>
+
+<script>
+    // --- JavaScript for the new demos ---
+
+    // Animated Hamburger Menu
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    if (hamburgerBtn && hamburgerMenu) {
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            hamburgerMenu.classList.toggle('active');
+        });
+    }
+
+    // Sliding Pane Menu
+    const slidingPaneBtn = document.getElementById('sliding-pane-btn');
+    const slidingPane = document.getElementById('sliding-pane');
+    const closePaneBtn = document.getElementById('close-pane-btn');
+    if (slidingPaneBtn && slidingPane && closePaneBtn) {
+        slidingPaneBtn.addEventListener('click', () => {
+            slidingPane.classList.add('active');
+        });
+        closePaneBtn.addEventListener('click', () => {
+            slidingPane.classList.remove('active');
+        });
+    }
+    
+    // Slide-In Menu
+    const slideInBtn = document.getElementById('slide-in-btn');
+    const slideInMenu = document.getElementById('slide-in-menu');
+    if (slideInBtn && slideInMenu) {
+        slideInBtn.addEventListener('click', () => {
+            slideInMenu.classList.toggle('active');
+        });
+    }
+
+    // Split-Screen Menu
+    const splitScreenBtn = document.getElementById('split-screen-btn');
+    const splitScreenMenu = document.getElementById('split-screen-menu');
+    if (splitScreenBtn && splitScreenMenu) {
+        splitScreenBtn.addEventListener('click', () => {
+            splitScreenMenu.classList.toggle('active');
+        });
+    }
+
+    // Accordion Menu
+    const accordionItems = document.querySelectorAll('.accordion-menu .menu-item');
+    accordionItems.forEach(item => {
+        const toggle = item.querySelector('.menu-item-toggle');
+        const submenu = item.querySelector('.submenu');
+        if (toggle && submenu) {
+            toggle.addEventListener('click', (event) => {
+                event.preventDefault();
+                const wasActive = toggle.classList.contains('active');
+                
+                // Close all other active menus
+                document.querySelectorAll('.accordion-menu .menu-item-toggle.active').forEach(activeToggle => {
+                    activeToggle.classList.remove('active');
+                    activeToggle.nextElementSibling.style.maxHeight = '0';
+                });
+                
+                // Open the clicked one if it wasn't already active
+                if (!wasActive) {
+                    toggle.classList.add('active');
+                    submenu.style.maxHeight = submenu.scrollHeight + "px";
+                }
+            });
+        }
+    });
+
+    // Spotlight Menu
+    const spotlightMenu = document.querySelector('.spotlight-menu');
+    if (spotlightMenu) {
+        const spotlight = spotlightMenu.querySelector('.spotlight');
+        spotlightMenu.addEventListener('mousemove', (e) => {
+            const rect = spotlightMenu.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            spotlight.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    }
+</script>
+<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+</html>
+

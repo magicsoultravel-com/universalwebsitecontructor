@@ -1,0 +1,524 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Styles Demo 2</title>
+<style>
+    /* Global styles for the demo page */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        background-color: #0d1117;
+        color: #e6edf3;
+        padding: 20px;
+        line-height: 1.6;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #f2f2f2;
+        border-bottom: 2px solid #2a2f3a;
+        padding-bottom: 10px;
+    }
+    .menu-container {
+        background-color: #161b22;
+        border: 1px solid #2a2f3a;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 40px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    .menu-container h2 {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #fff;
+    }
+    nav {
+        display: flex;
+        justify-content: center;
+    }
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    nav a {
+        display: inline-block;
+        padding: 10px 20px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border-radius: 6px;
+        font-weight: 500;
+        color: #e6edf3;
+        background-color: #2a2f3a;
+    }
+    footer {
+        text-align: center;
+        margin-top: 40px;
+        border-top: 1px solid #2a2f3a;
+        padding-top: 20px;
+        color: #999;
+        font-size: 0.8em;
+    }
+
+    /* --- Menu Specific Styles from old demo2 --- */
+
+    /* Perspective Menu */
+    .perspective-menu ul {
+        transform-style: preserve-3d;
+        transform: rotateX(15deg);
+        gap: 30px;
+    }
+    .perspective-menu li {
+        transition: transform 0.5s ease-out;
+    }
+    .perspective-menu li:hover {
+        transform: translateZ(20px) translateY(-5px);
+    }
+    .perspective-menu a {
+        background-color: #2a2f3a;
+        color: #fff;
+        border: 1px solid #3e4451;
+    }
+    .perspective-menu a:hover {
+        background-color: #3e4451;
+    }
+
+    /* Glitch Menu */
+    .glitch-menu a {
+        position: relative;
+        color: #fff;
+        background: none;
+        overflow: hidden;
+        border: 2px solid #2a2f3a;
+    }
+    .glitch-menu a:before, .glitch-menu a:after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #161b22;
+        overflow: hidden;
+        transition: transform 0s;
+        animation: none;
+    }
+    .glitch-menu a:before {
+        color: #f0f;
+        left: 2px;
+        clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+    }
+    .glitch-menu a:after {
+        color: #0ff;
+        left: -2px;
+        clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+    }
+    .glitch-menu a:hover:before { animation: glitch-anim-1 0.3s infinite linear alternate-reverse; }
+    .glitch-menu a:hover:after { animation: glitch-anim-2 0.3s infinite linear alternate-reverse; }
+    @keyframes glitch-anim-1 {
+        0% { transform: translate(0, 0); } 33% { transform: translate(-5px, -5px); }
+        66% { transform: translate(5px, 5px); } 100% { transform: translate(0, 0); }
+    }
+    @keyframes glitch-anim-2 {
+        0% { transform: translate(0, 0); } 33% { transform: translate(5px, -5px); }
+        66% { transform: translate(-5px, 5px); } 100% { transform: translate(0, 0); }
+    }
+
+    /* Spotlight Menu */
+    .spotlight-menu { position: relative; cursor: none; }
+    .spotlight-menu .spotlight {
+        position: absolute; width: 150px; height: 150px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%; transform: translate(-50%, -50%);
+        pointer-events: none; transition: opacity 0.3s; opacity: 0; z-index: 0;
+    }
+    .spotlight-menu:hover .spotlight { opacity: 1; }
+    .spotlight-menu a { color: #999; position: relative; z-index: 1; }
+    .spotlight-menu a:hover { color: #fff; }
+    
+    /* Ribbon Menu */
+    .ribbon-menu a {
+        display: inline-block; background: #0d6efd; color: #fff; padding: 10px 20px;
+        position: relative; margin: 0 15px; transition: all 0.3s;
+    }
+    .ribbon-menu a:before, .ribbon-menu a:after {
+        content: ''; position: absolute; top: 0; width: 20px; height: 100%;
+        background: #0a58ca; z-index: -1;
+    }
+    .ribbon-menu a:before { left: -10px; transform: skewX(20deg); }
+    .ribbon-menu a:after { right: -10px; transform: skewX(-20deg); }
+    .ribbon-menu a:hover { transform: translateY(-3px); }
+
+    /* Diagonal Menu */
+    .diagonal-menu ul {
+        display: flex; flex-direction: column; transform: skewX(-20deg); gap: 10px;
+    }
+    .diagonal-menu a {
+        background: #0d6efd; padding: 10px 20px; color: #fff;
+        display: inline-block; transform: skewX(20deg); transition: background 0.3s;
+    }
+    .diagonal-menu a:hover { background: #0a58ca; }
+
+    /* Floating Menu */
+    .floating-menu a {
+        display: inline-block; padding: 10px 25px; background: #0d6efd; color: #fff;
+        border-radius: 50px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); transition: all 0.3s;
+    }
+    .floating-menu a:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); }
+
+    /* Corrected 3D Cube Menu */
+    .three-d-cube {
+        position: relative;
+        width: 200px;
+        height: 50px;
+        margin: 40px auto;
+        perspective: 800px; /* Establishes the 3D perspective */
+    }
+    .cube-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d; /* Allows child elements to have a 3D position */
+        transition: transform 0.8s ease;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .three-d-cube:hover .cube-container {
+        transform: rotateX(90deg) rotateY(180deg);
+    }
+    .cube-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #3e4451;
+        background-color: #2a2f3a;
+        backface-visibility: hidden;
+    }
+    .cube-face a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: none;
+        color: #e6edf3;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .cube-front { transform: rotateY(0deg) translateZ(25px); }
+    .cube-back { transform: rotateY(180deg) translateZ(25px); }
+    .cube-right { transform: rotateY(90deg) translateZ(25px); }
+    .cube-left { transform: rotateY(-90deg) translateZ(25px); }
+    .cube-top { transform: rotateX(90deg) translateZ(25px); }
+    .cube-bottom { transform: rotateX(-90deg) translateZ(25px); }
+
+    /* Sliding Pill Menu */
+    .sliding-pill {
+        position: relative; padding: 5px; border: 1px solid #3e4451;
+        border-radius: 50px; background: #2a2f3a;
+    }
+    .sliding-pill ul {
+        gap: 0; position: relative; z-index: 1;
+    }
+    .sliding-pill a { background: none; transition: color 0.3s; border-radius: 50px; }
+    .sliding-pill a.active { color: #fff; }
+    .sliding-pill .indicator {
+        position: absolute; top: 5px; left: 5px; height: calc(100% - 10px);
+        background: #0d6efd; border-radius: 50px;
+        transition: transform 0.4s ease-out, width 0.4s ease-out; z-index: 0;
+    }
+
+    /* Animated SVG Underline Menu */
+    .svg-underline-menu ul { gap: 30px; }
+    .svg-underline-menu li { position: relative; }
+    .svg-underline-menu a { background: none; }
+    .svg-underline-menu svg { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; }
+    .svg-underline-menu path {
+        stroke: #fff; stroke-width: 2; fill: none; stroke-dasharray: 200;
+        stroke-dashoffset: 200; transition: stroke-dashoffset 0.5s ease-in-out;
+    }
+    .svg-underline-menu li:hover path { stroke-dashoffset: 0; }
+    
+    /* Morphing Shape Menu */
+    .morphing-shape-menu a {
+        background: transparent; color: #fff; position: relative; z-index: 1; overflow: hidden;
+    }
+    .morphing-shape-menu a:before {
+        content: ''; position: absolute; top: -5px; left: -5px; width: calc(100% + 10px); height: calc(100% + 10px);
+        background: #0d6efd; z-index: -1; border-radius: 6px;
+        transition: transform 0.5s cubic-bezier(0.86, 0, 0.07, 1); transform: scaleY(0); transform-origin: bottom;
+    }
+    .morphing-shape-menu a:hover:before { transform: scaleY(1); }
+
+    /* --- New Menu Styles --- */
+
+    /* 11. Glassmorphism Menu */
+    .glassmorphism-menu {
+        background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); padding: 15px;
+    }
+    .glassmorphism-menu ul { gap: 15px; }
+    .glassmorphism-menu a {
+        background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: background 0.3s, transform 0.3s;
+    }
+    .glassmorphism-menu a:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-3px); }
+
+    /* 12. Kinetic Typography Menu */
+    .kinetic-typography-menu ul { gap: 40px; }
+    .kinetic-typography-menu a { background: none; position: relative; padding-bottom: 5px; overflow: hidden; }
+    .kinetic-typography-menu a span { display: block; transform: translateY(0); transition: transform 0.4s ease-out; }
+    .kinetic-typography-menu a:hover span { transform: translateY(-100%); }
+    .kinetic-typography-menu a:after {
+        content: attr(data-text); position: absolute; top: 100%; left: 0; width: 100%; text-align: center;
+        transform: translateY(-100%); transition: transform 0.4s ease-out;
+    }
+    .kinetic-typography-menu a:hover:after { transform: translateY(-200%); }
+    
+    /* 13. Isometric Menu */
+    .isometric-menu ul {
+        transform: skewY(-10deg) rotateZ(-10deg); transform-style: preserve-3d; gap: 5px;
+    }
+    .isometric-menu li {
+        position: relative; transform: skewY(10deg) rotateZ(10deg);
+        transform-style: preserve-3d; transition: transform 0.3s;
+    }
+    .isometric-menu li:hover { transform: skewY(10deg) rotateZ(10deg) translateZ(10px); }
+    .isometric-menu a { background: #0d6efd; color: #fff; position: relative; transform: translateZ(2px); }
+    .isometric-menu a:after {
+        content: ''; position: absolute; top: 0; left: -10px; width: 10px; height: 100%;
+        background: #0a58ca; transform: skewY(-10deg) rotateZ(10deg) translateZ(-2px);
+    }
+
+    /* 14. Shutter Menu */
+    .shutter-menu a {
+        position: relative; overflow: hidden; background: #1e1e1e; color: #fff; transition: color 0.4s;
+    }
+    .shutter-menu a span { position: relative; z-index: 2; }
+    .shutter-menu a:before, .shutter-menu a:after {
+        content: ''; position: absolute; top: 0; width: 50%; height: 100%;
+        background: #0d6efd; transition: transform 0.4s; z-index: 1;
+    }
+    .shutter-menu a:before { left: 0; transform: translateX(-100%); }
+    .shutter-menu a:after { right: 0; transform: translateX(100%); }
+    .shutter-menu a:hover:before { transform: translateX(0); }
+    .shutter-menu a:hover:after { transform: translateX(0); }
+    .shutter-menu a:hover { color: #fff; }
+
+    /* 15. Push Button Menu */
+    .push-button-menu a {
+        background: #0d6efd; color: #fff; position: relative; top: 0;
+        box-shadow: 0 4px 0 #0a58ca; transition: all 0.1s;
+    }
+    .push-button-menu a:hover { background: #0a58ca; top: 4px; box-shadow: 0 0 0 #0a58ca; }
+
+    /* 16. Stacked Layers Menu */
+    .stacked-layers-menu ul { gap: 0; flex-direction: column; }
+    .stacked-layers-menu li {
+        position: relative; z-index: 10; transition: z-index 0.3s;
+    }
+    .stacked-layers-menu li:nth-child(2) { z-index: 9; }
+    .stacked-layers-menu li:nth-child(3) { z-index: 8; }
+    .stacked-layers-menu li:hover { z-index: 11; }
+    .stacked-layers-menu a {
+        transform: translateY(0); background: #2a2f3a;
+        transition: transform 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .stacked-layers-menu li:hover ~ li a { transform: translateY(15px); }
+
+    /* 17. Pop-out Submenu */
+    .pop-out-submenu li { position: relative; }
+    .pop-out-submenu a { background: #2a2f3a; }
+    .pop-out-submenu .submenu {
+        position: absolute; top: 0; left: 100%; display: none; flex-direction: column;
+        background: #3e4451; box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        padding: 5px; z-index: 20;
+    }
+    .pop-out-submenu li:hover > .submenu { display: flex; animation: slide-in 0.3s forwards; }
+    @keyframes slide-in {
+        from { transform: translateX(-20px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    .pop-out-submenu .submenu a { background: #3e4451; width: 150px; text-align: left; }
+    .pop-out-submenu .submenu a:hover { background: #555; }
+    
+    /* 18. Sliced Border Menu */
+    .sliced-border-menu a {
+        position: relative; background: transparent; border: 2px solid transparent; transition: background 0.4s;
+    }
+    .sliced-border-menu a:before, .sliced-border-menu a:after {
+        content: ''; position: absolute; width: 50%; height: 100%; background: transparent;
+        transition: all 0.4s; transform: skewX(-20deg);
+    }
+    .sliced-border-menu a:before {
+        top: 0; left: 0; border-left: 2px solid #fff; border-top: 2px solid #fff;
+    }
+    .sliced-border-menu a:after {
+        bottom: 0; right: 0; border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+    }
+    .sliced-border-menu a:hover:before, .sliced-border-menu a:hover:after { transform: skewX(-20deg) scaleX(1.1); }
+    .sliced-border-menu a:hover { background: #2a2f3a; }
+
+    /* 19. Morphing Blob Menu */
+    .morphing-blob-menu a {
+        position: relative; background: transparent; color: #fff; z-index: 1; overflow: hidden;
+    }
+    .morphing-blob-menu a:before {
+        content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0;
+        background: #0d6efd; border-radius: 50%; transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        transform: translate(-50%, -50%); z-index: -1;
+    }
+    .morphing-blob-menu a:hover:before { width: 250%; height: 250%; }
+
+    /* 20. Wavy Underline Menu */
+    .wavy-underline-menu a:after {
+        content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 3"><path d="M0,1.5 Q15,0 30,1.5 T60,1.5 T90,1.5" stroke="%23fff" stroke-width="2" fill="none" /></svg>');
+        background-size: 100% 100%; animation: wave 1.5s infinite linear;
+        transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease-out;
+    }
+    .wavy-underline-menu a:hover:after { transform: scaleX(1); }
+    @keyframes wave { 0% { background-position-x: 0; } 100% { background-position-x: -100px; } }
+</style>
+<script src="assets/js/demo-auth.js" defer></script></head>
+<body>
+
+<header>
+    <h1>Menu Styles Demo 2</h1>
+</header>
+<main>
+    
+        
+            <div class="menu-container">
+                <h2></h2>
+                <nav class="">
+                    
+                        <div class="spotlight"></div>
+                    
+
+                    
+                        <ul class="cube-container">
+                            <li class="cube-face cube-front"><a href="#"></a></li>
+                            <li class="cube-face cube-back"><a href="#"></a></li>
+                            <li class="cube-face cube-right"><a href="#"></a></li>
+                            <li class="cube-face cube-left"><a href="#"></a></li>
+                            <li class="cube-face cube-top"><a href="#"></a></li>
+                            <li class="cube-face cube-bottom"><a href="#">Careers</a></li>
+                        </ul>
+                    
+                        <div class="indicator"></div>
+                        <ul>
+                            
+                                <li>
+                                    <a href="#" data-text="">
+                                        
+                                    </a>
+                                </li>
+                            
+                        </ul>
+                    
+                        <ul>
+                            
+                                <li>
+                                    <a href="#">
+                                        
+                                        <svg viewBox="0 0 100 3">
+                                            <path d="M 0 1.5 C 25 3, 75 3, 100 1.5" />
+                                        </svg>
+                                    </a>
+                                </li>
+                            
+                        </ul>
+                    
+                        <ul>
+                            
+                                <li>
+                                    <a href="#"></a>
+                                    
+                                        <ul class="submenu">
+                                            
+                                                <li><a href="#"></a></li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                        <ul>
+                            
+                                <li>
+                                    <a href="#" data-text="">
+                                        <span></span>
+                                    </a>
+                                </li>
+                            
+                        </ul>
+                    
+                </nav>
+            </div>
+        
+    
+        <p>Menu data or styles not found. Please check your files.</p>
+    
+</main>
+<footer>
+    <p>&copy;  Your Website. All Rights Reserved.</p>
+</footer>
+
+<script>
+    // Spotlight Menu
+    const spotlightMenu = document.querySelector('.spotlight-menu');
+    if (spotlightMenu) {
+        const spotlight = spotlightMenu.querySelector('.spotlight');
+        spotlightMenu.addEventListener('mousemove', (e) => {
+            const rect = spotlightMenu.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            spotlight.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    }
+
+    // Sliding Pill Menu
+    const slidingPillNav = document.querySelector('.sliding-pill');
+    if (slidingPillNav) {
+        const links = slidingPillNav.querySelectorAll('a');
+        const indicator = slidingPillNav.querySelector('.indicator');
+
+        function updateIndicator(target) {
+            const width = target.offsetWidth;
+            const left = target.offsetLeft;
+            indicator.style.width = `${width}px`;
+            indicator.style.transform = `translateX(${left}px)`;
+        }
+
+        const firstLink = links[0];
+        if (firstLink) {
+            updateIndicator(firstLink);
+            firstLink.classList.add('active');
+        }
+
+        links.forEach(link => {
+            link.addEventListener('mouseenter', (e) => {
+                updateIndicator(e.target);
+                links.forEach(l => l.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+    }
+</script>
+<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+</html>

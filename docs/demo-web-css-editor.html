@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Code Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e;
+            color: #d4d4d4;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            height: 100vh;
+        }
+
+        .modal {
+            position: absolute;
+            background-color: #2b2b45;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            resize: both;
+            overflow: hidden;
+            z-index: 10;
+            min-width: 300px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            cursor: grab;
+            padding: 0.5rem 1rem;
+            background-color: #3e3e60;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header .dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .modal-header .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .modal-header .dot.red { background-color: #ff5f56; }
+        .modal-header .dot.yellow { background-color: #ffbd2e; }
+        .modal-header .dot.green { background-color: #27c93f; }
+
+        .modal-content {
+            flex-grow: 1;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .code-textarea {
+            flex-grow: 1;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border: none;
+            outline: none;
+            resize: none;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow: auto;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #2b2b2b;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        .live-preview {
+            width: 100%;
+            flex-grow: 1;
+            background-color: #f0f0f0;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+        
+        #preview-content-wrapper {
+            flex-grow: 1;
+            overflow: auto;
+            transform-origin: top left;
+        }
+
+        #preview-content {
+            padding: 1rem;
+        }
+        
+        .zoom-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .zoom-controls button {
+            background-color: #e5e7eb;
+            color: #374151;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: background-color 0.2s;
+        }
+        
+        .zoom-controls button:hover {
+            background-color: #d1d5db;
+        }
+    </style>
+<script src="assets/js/demo-auth.js" defer></script></head>
+<body class="bg-gray-900 text-white p-6 flex flex-col items-center justify-center">
+
+    <header class="text-center mb-6">
+        <h1 class="text-4xl font-extrabold text-blue-400">Live Code Editor</h1>
+        <p class="mt-2 text-gray-400">Edit HTML and CSS in floating windows and see the result instantly.</p>
+    </header>
+
+    <div id="preview-area" class="live-preview relative w-full h-full">
+        <div id="preview-content-wrapper">
+            <div id="preview-content"></div>
+        </div>
+        
+        <div class="zoom-controls">
+            <button id="zoom-in-button" title="Zoom In">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <button id="zoom-out-button" title="Zoom Out">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <button id="zoom-reset-button" title="Reset Zoom">100%</button>
+        </div>
+    </div>
+    
+    <div id="html-modal" class="modal" style="top: 100px; left: 50px; width: 450px; height: 350px;">
+        <div class="modal-header">
+            <div class="dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <span>HTML Editor</span>
+        </div>
+        <div class="modal-content">
+            <textarea id="html-code" class="code-textarea custom-scrollbar" spellcheck="false" placeholder=""></textarea>
+        </div>
+    </div>
+
+    <div id="css-modal" class="modal" style="top: 150px; left: 550px; width: 450px; height: 350px;">
+        <div class="modal-header">
+            <div class="dots">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <span>CSS Editor</span>
+        </div>
+        <div class="modal-content">
+            <textarea id="css-code" class="code-textarea custom-scrollbar" spellcheck="false" placeholder="/* Write your CSS here */"></textarea>
+        </div>
+    </div>
+    
+    <div class="flex items-center space-x-4 mt-4">
+        <button id="run-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg">Run</button>
+        <button id="reset-button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-105 shadow-lg">Reset</button>
+    </div>
+
+    <script>
+        const htmlCodeEl = document.getElementById('html-code');
+        const cssCodeEl = document.getElementById('css-code');
+        const previewArea = document.getElementById('preview-area');
+        const runButton = document.getElementById('run-button');
+        const resetButton = document.getElementById('reset-button');
+        const zoomInButton = document.getElementById('zoom-in-button');
+        const zoomOutButton = document.getElementById('zoom-out-button');
+        const zoomResetButton = document.getElementById('zoom-reset-button');
+        const htmlModal = document.getElementById('html-modal');
+        const cssModal = document.getElementById('css-modal');
+        
+        let currentZoomLevel = 1;
+        const zoomStep = 0.2;
+        let highestZIndex = 10;
+        
+        // Initial code for reset functionality
+        const initialHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Awesome Page</title>
+<script src="assets/js/demo-auth.js" defer></script></head>
+<body>
+    <header>
+        <h1 class="main-title">My Crazy Web Page</h1>
+        <p class="subtitle">A playground for HTML and CSS</p>
+    </header>
+
+    <main>
+        <h2>Welcome!</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <h3>Another Section</h3>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Live Editor. All rights reserved.</p>
+    </footer>
+<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+</html>`;
+
+        const initialCss = `/* Get ready for some crazy CSS! */
+@keyframes neon-glow {
+    0% { filter: drop-shadow(0 0 5px #ff00ff) drop-shadow(0 0 10px #ff00ff); }
+    50% { filter: drop-shadow(0 0 15px #00ffff) drop-shadow(0 0 25px #00ffff); }
+    100% { filter: drop-shadow(0 0 5px #ff00ff) drop-shadow(0 0 10px #ff00ff); }
+}
+
+body {
+    background: linear-gradient(45deg, #1d2b64, #f8cdda);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    animation: neon-glow 3s infinite alternate;
+}
+
+header {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 2px solid #fff;
+}
+
+.main-title {
+    font-family: 'Fira Code', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    color: #ffcc00;
+}
+
+main {
+    padding: 2rem;
+    line-height: 1.6;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 2rem;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
+
+h2, h3 {
+    color: #ff55ff;
+    border-bottom: 1px dashed #ff55ff;
+    padding-bottom: 0.5rem;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    border-top: 2px solid #fff;
+    color: #ccc;
+    font-size: 0.8rem;
+}
+`;
+
+        // Function to update the live preview
+        function updatePreview() {
+            const previewContent = document.getElementById('preview-content');
+            const previewShadowRoot = previewArea.shadowRoot || previewArea.attachShadow({ mode: 'open' });
+
+            // Clear existing content
+            previewShadowRoot.innerHTML = '';
+            
+            // Step 1: MANUALLY CREATE AND INJECT THE FONT LINK FIRST
+            // This is crucial for the font to load before the CSS is applied.
+            const fontLink = document.createElement('link');
+            fontLink.rel = 'stylesheet';
+            fontLink.href = 'https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap';
+            previewShadowRoot.appendChild(fontLink);
+
+            // Step 2: Create a style element for CSS and inject the code
+            const style = document.createElement('style');
+            style.textContent = cssCodeEl.value;
+            previewShadowRoot.appendChild(style);
+
+            // Step 3: Create a wrapper for HTML content and inject it
+            const contentWrapper = document.createElement('div');
+            contentWrapper.innerHTML = htmlCodeEl.value;
+            previewShadowRoot.appendChild(contentWrapper);
+        }
+
+        // Function to update the zoom level
+        function updateZoom() {
+            const previewContentWrapper = previewArea.shadowRoot.getElementById('preview-content-wrapper');
+            if (previewContentWrapper) {
+                previewContentWrapper.style.transform = `scale(${currentZoomLevel})`;
+            }
+        }
+
+        // Draggable and resizable modal functionality
+        function makeDraggableAndResizable(modal) {
+            const header = modal.querySelector('.modal-header');
+            
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+
+            header.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                highestZIndex++;
+                modal.style.zIndex = highestZIndex;
+                startX = e.clientX;
+                startY = e.clientY;
+                initialX = modal.offsetLeft;
+                initialY = modal.offsetTop;
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                modal.style.left = `${initialX + deltaX}px`;
+                modal.style.top = `${initialY + deltaY}px`;
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            modal.addEventListener('mousedown', () => {
+                highestZIndex++;
+                modal.style.zIndex = highestZIndex;
+            });
+        }
+
+        // Apply functionality to modals
+        makeDraggableAndResizable(htmlModal);
+        makeDraggableAndResizable(cssModal);
+
+        // Run button click event listener
+        runButton.addEventListener('click', updatePreview);
+
+        // Reset button click event listener
+        resetButton.addEventListener('click', () => {
+            htmlCodeEl.value = initialHtml;
+            cssCodeEl.value = initialCss;
+            currentZoomLevel = 1;
+            updateZoom();
+            updatePreview();
+        });
+
+        // Event listeners for live updates as the user types
+        // Using a debounced function to improve performance
+        let debounceTimer;
+        const debounceUpdate = () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(updatePreview, 300);
+        };
+        htmlCodeEl.addEventListener('input', debounceUpdate);
+        cssCodeEl.addEventListener('input', debounceUpdate);
+
+        // Zoom button event listeners
+        zoomInButton.addEventListener('click', () => {
+            currentZoomLevel += zoomStep;
+            updateZoom();
+        });
+
+        zoomOutButton.addEventListener('click', () => {
+            if (currentZoomLevel > zoomStep) {
+                currentZoomLevel -= zoomStep;
+                updateZoom();
+            }
+        });
+
+        zoomResetButton.addEventListener('click', () => {
+            currentZoomLevel = 1;
+            updateZoom();
+        });
+
+        // Initial update when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            htmlCodeEl.value = initialHtml;
+            cssCodeEl.value = initialCss;
+            updatePreview();
+        });
+    </script>
+<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+</html>

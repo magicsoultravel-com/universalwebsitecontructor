@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maps Demo Editor — UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+</head>
+<body>
+<main class="container">
+<h1>Maps Demo Editor</h1>
+<p class="demo-note">Static demo — edit marker JSON in browser. Use <a href="demo-maps-demo.html">Maps Demo</a> for the interactive map.</p>
+<textarea id="json" rows="16" style="width:100%;font-family:monospace;background:#1a1a1a;color:#f2f2f2;border-radius:8px;padding:12px"></textarea>
+<button type="button" id="save">Save to browser</button>
+</main>
+<div id="demo-auth-footer"></div>
+<script>
+const KEY = 'uwec-map-markers';
+document.addEventListener('DOMContentLoaded', () => {
+  const ta = document.getElementById('json');
+  ta.value = localStorage.getItem(KEY) || '[]';
+  document.getElementById('save').onclick = () => {
+    try { JSON.parse(ta.value); localStorage.setItem(KEY, ta.value); alert('Saved.'); }
+    catch { alert('Invalid JSON'); }
+  };
+  DemoAuth.renderFooter('#demo-auth-footer');
+});
+</script>
+</body>
+</html>

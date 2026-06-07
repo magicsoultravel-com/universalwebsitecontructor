@@ -1,0 +1,7 @@
+{
+  "name": "universalwebsitecontructor",
+  "private": true,
+  "scripts": {
+    "preview": "npx serve docs"
+  }
+}

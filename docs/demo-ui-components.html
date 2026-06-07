@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Components — UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+</head>
+<body>
+<main>
+    <div class="flex-container">
+        <aside class="left-sidebar">
+            <section>
+                <h2>Left Sidebar</h2>
+                <p>This is my left sidebar content.</p>
+            </section>
+        </aside>
+
+        <div class="main-content">
+            <section>
+                <h2>Interface Demos</h2>
+                <p>Click the buttons on the edges of the screen to reveal different slide-in panels, or use the grouped buttons at the top for more options.</p>
+                <button id="openModalBtn">Open Modal</button>
+            </section>
+            
+            <section class="design-trope-section">
+                <h2>Design Trope Examples</h2>
+                <p>These are common UI patterns for presenting content and forms.</p>
+
+                ---
+                
+                <h3>Card Grid</h3>
+                <p>A simple, scannable way to display multiple items, like blog posts or products.</p>
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-content">
+                            <h4>Card Title 1</h4>
+                            <p>A short description for this card. It's a great way to showcase content in a visually appealing format.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <h4>Card Title 2</h4>
+                            <p>This card demonstrates how to use this pattern for a different item. They are easy to rearrange and stack on mobile.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <h4>Card Title 3</h4>
+                            <p>Another example of a self-contained card. This design is highly flexible for various types of content.</p>
+                        </div>
+                    </div>
+                </div>
+
+                ---
+
+                <h3>Accordion</h3>
+                <p>Use this for FAQs or long lists to save vertical space.</p>
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-button">What is an accordion?</button>
+                        <div class="accordion-content">
+                            <p>An accordion is a stack of content that can be expanded or collapsed to reveal or hide information. It helps to reduce visual clutter on a page.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-button">How do I use this?</button>
+                        <div class="accordion-content">
+                            <p>By clicking on the title, you can toggle the visibility of the content below. This is great for FAQs, product details, or any structured list.</p>
+                        </div>
+                    </div>
+                </div>
+
+                ---
+
+                <h3>Tabbed Interface</h3>
+                <p>Organize related content into different views.</p>
+                <div class="tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="tab1">Tab 1</button>
+                        <button class="tab-button" data-tab="tab2">Tab 2</button>
+                    </div>
+                    <div class="tab-content-container">
+                        <div id="tab1" class="tab-content active">
+                            <h4>Content for Tab 1</h4>
+                            <p>This is the content for the first tab. It's the default view when the page loads.</p>
+                        </div>
+                        <div id="tab2" class="tab-content">
+                            <h4>Content for Tab 2</h4>
+                            <p>You can put different information here. The key is that all the content is in the same place, reducing page length.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            <section>
+                <h2>More Design Tropes</h2>
+
+                ---
+
+                <h3>Carousel</h3>
+                <p>Display multiple items in a compact, rotating view.</p>
+                <div class="carousel-container">
+                    <div class="carousel-track">
+                        <div class="carousel-slide">
+                            <div class="card">
+                                <h4>Slide 1</h4>
+                                <p>This is the first item in the carousel.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <div class="card">
+                                <h4>Slide 2</h4>
+                                <p>This is the second item. Perfect for featured content.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <div class="card">
+                                <h4>Slide 3</h4>
+                                <p>You can use this for testimonials, images, or more.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-prev-btn">&lt;</button>
+                    <button class="carousel-next-btn">&gt;</button>
+                </div>
+
+                ---
+
+                <h3>Filters and Tags</h3>
+                <p>Let users sort or narrow down content dynamically.</p>
+                <div class="filter-controls">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="categoryA">Category A</button>
+                    <button class="filter-btn" data-filter="categoryB">Category B</button>
+                </div>
+                <div class="filter-content-grid card-grid">
+                    <div class="card" data-category="categoryA">
+                        <div class="card-content">
+                            <h4>Item A1</h4>
+                            <p>This item belongs to Category A.</p>
+                        </div>
+                    </div>
+                    <div class="card" data-category="categoryB">
+                        <div class="card-content">
+                            <h4>Item B1</h4>
+                            <p>This item belongs to Category B.</p>
+                        </div>
+                    </div>
+                    <div class="card" data-category="categoryA">
+                        <div class="card-content">
+                            <h4>Item A2</h4>
+                            <p>Another item in Category A.</p>
+                        </div>
+                    </div>
+                    <div class="card" data-category="categoryB">
+                        <div class="card-content">
+                            <h4>Item B2</h4>
+                            <p>Another item in Category B.</p>
+                        </div>
+                    </div>
+                </div>
+
+                ---
+
+                <h3>Breadcrumbs</h3>
+                <p>Show the user's location within your site's hierarchy.</p>
+                <div class="breadcrumbs">
+                    <a href="#">Home</a>
+                    <span>&rsaquo;</span>
+                    <a href="#">Products</a>
+                    <span>&rsaquo;</span>
+                    <a href="#">Electronics</a>
+                    <span>&rsaquo;</span>
+                    <span>Laptops</span>
+                </div>
+            </section>
+            
+            <section>
+                
+            </section>
+            <section>
+                
+            </section>
+            <section>
+                
+            </section>
+            
+        </div>
+
+        <aside class="right-sidebar">
+            <section>
+                <h2>Right Sidebar</h2>
+                <p>This is my right sidebar content.</p>
+            </section>
+        </aside>
+    </div>
+</main>
+
+<div id="myModal" class="modal-overlay">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>My Modal</h2>
+    <p>This is a standard modal pop-up. It's great for login forms, image galleries, or important messages.</p>
+    <div class="modal-buttons">
+      <button>Got it</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel-buttons-top">
+    <button id="btn-top-nav" class="action-button-group">Top Nav</button>
+    <button id="btn-top-info" class="action-button-group">Top Info</button>
+    <button id="btn-top-search" class="action-button-group">Top Search</button>
+</div>
+
+<div class="panel-buttons-edges">
+    <button id="btn-left-edge" class="action-button-circle-left">Left</button>
+    <button id="btn-right-edge" class="action-button-circle-right">Right</button>
+    <button id="btn-bottom-edge" class="action-button-circle-bottom">Bottom</button>
+</div>
+
+<div id="panel-top-nav" class="slide-panel panel-top">
+    <button class="close-panel-btn">&times;</button>
+    <section>
+        <h2>Top Navigation</h2>
+        <p>This panel slides from the top and is perfect for quick links.</p>
+    </section>
+</div>
+<div id="panel-top-info" class="slide-panel panel-top">
+    <button class="close-panel-btn">&times;</button>
+    <section>
+        <h2>Account Info</h2>
+        <p>This panel slides from the top with user account details.</p>
+    </section>
+</div>
+<div id="panel-top-search" class="slide-panel panel-top">
+    <button class="close-panel-btn">&times;</button>
+    <section>
+        <h2>Search</h2>
+        <input type="search" placeholder="Type here...">
+    </section>
+</div>
+<div id="panel-left-edge" class="slide-panel panel-left">
+    <button class="close-panel-btn">&times;</button>
+    <section>
+        <h2>Left Panel</h2>
+        <p>This panel slides from the left.</p>
+    </section>
+</div>
+<div id="panel-right-edge" class="slide-panel panel-right">
+    <button class="close-panel-btn">&times;</button>
+    <section>
+        <h2>Right Panel</h2>
+        <p>This panel slides from the right.</p>
+    </section>
+</div>
+<div id="panel-bottom-edge" class="slide-panel panel-bottom">
+    <button class="close-panel-btn">&times;</button>
+    <section>
+        <h2>Bottom Panel</h2>
+        <p>This panel slides up from the bottom.</p>
+    </section>
+</div>
+
+
+<div id="demo-auth-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth&&DemoAuth.renderFooter('#demo-auth-footer'));</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Modal functionality
+    const openModalBtn = document.getElementById('openModalBtn');
+    const modal = document.getElementById('myModal');
+    const modalCloseBtn = modal.querySelector('.close-btn');
+
+    openModalBtn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+    });
+    modalCloseBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Panel functionality
+    const panels = {
+        'top-nav': document.getElementById('panel-top-nav'),
+        'top-info': document.getElementById('panel-top-info'),
+        'top-search': document.getElementById('panel-top-search'),
+        'left-edge': document.getElementById('panel-left-edge'),
+        'right-edge': document.getElementById('panel-right-edge'),
+        'bottom-edge': document.getElementById('panel-bottom-edge')
+    };
+
+    function togglePanel(panelId) {
+        // Close any open panels before opening a new one
+        for (const id in panels) {
+            if (id !== panelId) {
+                panels[id].classList.remove('is-open');
+            }
+        }
+        panels[panelId].classList.toggle('is-open');
+    }
+
+    // Buttons for panels
+    document.getElementById('btn-top-nav').addEventListener('click', () => togglePanel('top-nav'));
+    document.getElementById('btn-top-info').addEventListener('click', () => togglePanel('top-info'));
+    document.getElementById('btn-top-search').addEventListener('click', () => togglePanel('top-search'));
+    document.getElementById('btn-left-edge').addEventListener('click', () => togglePanel('left-edge'));
+    document.getElementById('btn-right-edge').addEventListener('click', () => togglePanel('right-edge'));
+    document.getElementById('btn-bottom-edge').addEventListener('click', () => togglePanel('bottom-edge'));
+
+    document.querySelectorAll('.close-panel-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.target.closest('.slide-panel').classList.remove('is-open');
+        });
+    });
+
+    // Accordion functionality
+    document.querySelectorAll('.accordion-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const content = button.nextElementSibling;
+            button.classList.toggle('active');
+            if (button.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            } else {
+                content.style.maxHeight = '0';
+            }
+        });
+    });
+
+    // Tabbed interface functionality
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+            // Deactivate all buttons and content
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Activate the clicked button and its corresponding content
+            button.classList.add('active');
+            const tabId = button.getAttribute('data-tab');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    // Carousel functionality
+    const carouselTrack = document.querySelector('.carousel-track');
+    const slides = Array.from(carouselTrack.children);
+    const prevBtn = document.querySelector('.carousel-prev-btn');
+    const nextBtn = document.querySelector('.carousel-next-btn');
+    const slideWidth = slides[0].getBoundingClientRect().width;
+    let currentSlide = 0;
+
+    const setSlidePosition = (slide, index) => {
+        slide.style.left = slideWidth * index + 'px';
+    };
+    slides.forEach(setSlidePosition);
+
+    const moveToSlide = (track, currentSlide, targetSlide) => {
+        track.style.transform = 'translateX(-' + targetSlide.style.left + ')';
+        currentSlide.classList.remove('current-slide');
+        targetSlide.classList.add('current-slide');
+    };
+
+    nextBtn.addEventListener('click', () => {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            moveToSlide(carouselTrack, slides[currentSlide - 1], slides[currentSlide]);
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentSlide > 0) {
+            currentSlide--;
+            moveToSlide(carouselTrack, slides[currentSlide + 1], slides[currentSlide]);
+        }
+    });
+
+    // Filter functionality
+    document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            const filterValue = button.getAttribute('data-filter');
+            
+            document.querySelectorAll('.filter-content-grid .card').forEach(card => {
+                if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+</body>
+</html>

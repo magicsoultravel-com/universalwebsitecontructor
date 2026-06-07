@@ -1,0 +1,452 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Font Demo with Effects Playground</title>
+
+<link href="" rel="stylesheet">
+
+<style>
+body{ background:#0d1117; color:#e6edf3; font-family:sans-serif; padding:1rem; }
+table{ width:100%; border-collapse:collapse; margin-top:1rem; }
+th, td{ border:1px solid #2a2f3a; padding:0.35rem 0.5rem; text-align:left; }
+th{ background:#161b22; cursor:pointer; }
+input[type=search]{ padding:0.3rem; border-radius:4px; border:1px solid #2a2f3a; margin-bottom:0.5rem; background:#161b22; color:#e6edf3; }
+button{ margin-left:0.25rem; padding:0.2rem 0.5rem; background:#161b22; border:1px solid #2a2f3a; color:#e6edf3; cursor:pointer; border-radius:4px; }
+input[type=color]{ margin-left:0.25rem; cursor:pointer; vertical-align:middle; }
+.sample-text{ display:inline-block; }
+th.sorted-asc::after{ content:" â–²"; } 
+th.sorted-desc::after{ content:" â–¼"; }
+
+/* Effects classes */
+.effect-wave{ display:inline-block; animation:wave 1.5s infinite; }
+@keyframes wave{0%,60%,100%{transform:translateY(0)}20%{transform:translateY(-5px)}40%{transform:translateY(5px)}}
+
+.effect-neon{ color:#0ff; text-shadow:0 0 5px #0ff,0 0 10px #0ff,0 0 20px #0ff,0 0 40px #0ff; }
+
+.effect-rainbow{ background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f); -webkit-background-clip:text; color:transparent; animation:rainbow 3s linear infinite; }
+@keyframes rainbow{0%{background-position:0%}100%{background-position:100%}}
+
+.effect-glitch{ position:relative; color:#fff; }
+.effect-glitch::before,.effect-glitch::after{ content:attr(data-text); position:absolute; left:0; top:0; color:#f0f; clip-path:polygon(0 0,100% 0,100% 33%,0 33%);}
+.effect-glitch::after{ color:#0ff; clip-path:polygon(0 33%,100% 33%,100% 66%,0 66%);}
+
+.effect-shadow{ text-shadow:2px 2px 0 #f00, -2px -2px 0 #0f0, 2px -2px 0 #00f, -2px 2px 0 #ff0; }
+
+.effect-skew{ display:inline-block; transform:skewX(-20deg); }
+
+.effect-rotate{ display:inline-block; transform:rotate(-10deg); }
+
+.effect-blur{ filter:blur(1.5px); }
+
+.effect-outline{ -webkit-text-stroke:1px #ff0; color:#000; }
+
+.effect-pulse{ animation:pulse 1s infinite alternate; }
+@keyframes pulse{0%{transform:scale(1)}100%{transform:scale(1.3)}}
+/* Wobble Animation */
+.effect-wobble { display:inline-block; animation:wobble 1s infinite; }
+@keyframes wobble {
+  0%,100% { transform:rotate(0deg); }
+  15% { transform:rotate(-5deg); }
+  30% { transform:rotate(5deg); }
+  45% { transform:rotate(-3deg); }
+  60% { transform:rotate(3deg); }
+  75% { transform:rotate(-2deg); }
+}
+
+/* Gradient Outline */
+.effect-gradient-outline { 
+  color: white; 
+  -webkit-text-stroke: 1px; 
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(45deg, #f00,#0f0,#00f,#ff0,#f0f); 
+  -webkit-background-clip: text; 
+}
+
+/* Multi-Shadow */
+.effect-multishadow { 
+  color:#fff; 
+  text-shadow:2px 2px 0 #f00, 4px 4px 0 #0f0, 6px 6px 0 #00f, 8px 8px 0 #ff0;
+}
+
+/* Tilt & Skew */
+.effect-tiltskew { display:inline-block; transform:rotate(-10deg) skewX(15deg); }
+
+/* Bounce */
+.effect-bounce { display:inline-block; animation:bounce 1s infinite alternate; }
+@keyframes bounce { 0%{transform:translateY(0)} 100%{transform:translateY(-15px)} }
+
+/* Shake Animation */
+.effect-shake { display:inline-block; animation:shake 0.5s infinite; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-3px)} 50%{transform:translateX(3px)} 75%{transform:translateX(-2px)} }
+
+/* Fire Glow */
+.effect-fire { color:#ff5500; text-shadow:0 0 5px #ff5500, 0 0 10px #ff2200, 0 0 20px #ff0000, 0 0 40px #aa0000; }
+
+/* Shadow Pulse */
+.effect-shadowpulse { text-shadow: 2px 2px 0 #f00, -2px -2px 0 #0f0, 2px -2px 0 #00f, -2px 2px 0 #ff0; animation:pulse 1s infinite alternate; }
+
+/* Jitter */
+.effect-jitter { display:inline-block; animation:jitter 0.3s infinite; }
+@keyframes jitter { 0%,100%{transform:translate(0,0)} 20%{transform:translate(2px,-2px)} 40%{transform:translate(-2px,2px)} 60%{transform:translate(1px,1px)} 80%{transform:translate(-1px,-1px)} }
+
+/* Neon Flicker */
+.effect-flicker { color:#0ff; text-shadow:0 0 3px #0ff,0 0 7px #0ff,0 0 10px #0ff; animation:flicker 0.15s infinite; }
+@keyframes flicker { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* --- Hover Effects --- */
+.hover-grow:hover { transform:scale(1.3); transition:0.3s; }
+.hover-rotate:hover { transform:rotate(15deg); transition:0.3s; }
+.hover-skew:hover { transform:skewX(15deg); transition:0.3s; }
+.hover-color:hover { color:#ff0 !important; transition:0.3s; }
+.hover-shadow:hover { text-shadow:3px 3px 5px #f0f, -3px -3px 5px #0ff; transition:0.3s; }
+
+/* NEW EFFECTS */
+.effect-shake:hover { display:inline-block; animation:shake 0.5s infinite; }
+@keyframes shake { 0%,100%{ transform:translateX(0) } 20%,60%{ transform:translateX(-3px) } 40%,80%{ transform:translateX(3px) } }
+
+.effect-bounce:hover { display:inline-block; animation:bounce 1s infinite; }
+@keyframes bounce { 0%,20%,50%,80%,100%{ transform:translateY(0) } 40%{ transform:translateY(-10px) } 60%{ transform:translateY(-5px) } }
+
+.effect-wiggle:hover { display:inline-block; animation:wiggle 0.7s infinite; }
+@keyframes wiggle { 0%,100%{ transform:rotate(0deg) } 25%{ transform:rotate(5deg) } 75%{ transform:rotate(-5deg) } }
+
+.effect-flip:hover { display:inline-block; transform-origin:center; animation:flip 1s infinite; }
+@keyframes flip { 0%,100%{ transform:rotateY(0deg) } 50%{ transform:rotateY(180deg) } }
+
+.effect-colorwave { display:inline-block; background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f); -webkit-background-clip:text; color:transparent; animation:colorwave 3s linear infinite; }
+@keyframes colorwave{0%{background-position:0%}100%{background-position:200%}}
+
+.effect-drip:hover { display:inline-block; animation:drip 1s forwards; }
+@keyframes drip { 0%{ transform:translateY(0) } 100%{ transform:translateY(20px) rotate(5deg) } }
+
+.effect-spin:hover { display:inline-block; animation:spin 1s linear infinite; }
+@keyframes spin { 0%{ transform:rotate(0deg) } 100%{ transform:rotate(360deg) } }
+
+.effect-wavytext { display:inline-block; animation:wavy 2s ease-in-out infinite; }
+@keyframes wavy { 0%,100%{ transform:translateY(0) } 25%{ transform:translateY(-8px) } 50%{ transform:translateY(0) } 75%{ transform:translateY(8px) } }
+
+.effect-float { display:inline-block; animation:float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-10px) } }
+
+.effect-zoompulse { display:inline-block; animation:zoompulse 1s infinite alternate; }
+@keyframes zoompulse { 0%{ transform:scale(1) } 100%{ transform:scale(1.5) } }
+
+/* HOVER EFFECTS */
+.hover-grow:hover { transform:scale(1.2); transition:0.3s; display:inline-block; }
+.hover-rotate:hover { transform:rotate(15deg); transition:0.3s; display:inline-block; }
+.hover-skew:hover { transform:skewX(20deg); transition:0.3s; display:inline-block; }
+.hover-color:hover { color:#ff00ff; transition:0.3s; }
+.hover-shadow:hover { text-shadow:2px 2px 4px #0ff; transition:0.3s; }
+/* Slide off to the right */
+.effect-runaway { display:inline-block; animation:runaway 3s forwards; }
+@keyframes runaway { 0%{ transform:translateX(0); opacity:1; } 100%{ transform:translateX(200vw); opacity:0; } }
+
+/* Slide off to the left */
+.effect-fleeleft { display:inline-block; animation:fleeleft 3s forwards; }
+@keyframes fleeleft { 0%{ transform:translateX(0); opacity:1; } 100%{ transform:translateX(-200vw); opacity:0; } }
+
+/* Slide up and disappear */
+.effect-flyup { display:inline-block; animation:flyup 3s forwards; }
+@keyframes flyup { 0%{ transform:translateY(0); opacity:1; } 100%{ transform:translateY(-100vh); opacity:0; } }
+
+/* Slide down and disappear */
+.effect-flydown { display:inline-block; animation:flydown 3s forwards; }
+@keyframes flydown { 0%{ transform:translateY(0); opacity:1; } 100%{ transform:translateY(100vh); opacity:0; } }
+
+/* Random jitter + vanish */
+.effect-vanish { display:inline-block; animation:vanish 3s forwards; }
+@keyframes vanish { 0%{ transform:translate(0,0); opacity:1; } 50%{ transform:translate(50px,-30px) rotate(10deg); opacity:0.5; } 100%{ transform:translate(200px,-100px) rotate(45deg); opacity:0; } }
+
+/* Runaway right and return */
+.effect-runaway-loop {
+  display:inline-block;
+  animation:runawayLoop 4s ease-in-out infinite;
+}
+@keyframes runawayLoop {
+  0%, 20% { transform:translateX(0); opacity:1; }
+  50% { transform:translateX(200px); opacity:0; }
+  80%, 100% { transform:translateX(0); opacity:1; }
+}
+
+/* Fly up and return */
+.effect-flyup-loop {
+  display:inline-block;
+  animation:flyupLoop 4s ease-in-out infinite;
+}
+@keyframes flyupLoop {
+  0%, 20% { transform:translateY(0); opacity:1; }
+  50% { transform:translateY(-150px); opacity:0; }
+  80%, 100% { transform:translateY(0); opacity:1; }
+}
+
+/* Random vanish and return (jitter) */
+.effect-vanish-loop {
+  display:inline-block;
+  animation:vanishLoop 4s ease-in-out infinite;
+}
+@keyframes vanishLoop {
+  0%, 20% { transform:translate(0,0) rotate(0deg); opacity:1; }
+  50% { transform:translate(50px,-30px) rotate(15deg); opacity:0; }
+  80%, 100% { transform:translate(0,0) rotate(0deg); opacity:1; }
+}
+/* Weight, style, spacing and combined effects */
+
+.effect-bold-neon {
+    font-weight: 900;
+    font-style: normal;
+    animation: wobble 1.5s infinite;
+    color: #0ff;
+    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+}
+
+.effect-italic-rainbow {
+    font-style: italic;
+    font-weight: 400;
+    background: linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: pulse 1s infinite alternate, rainbow 3s linear infinite;
+}
+
+.effect-spaced-glitch {
+    letter-spacing: 3px;
+    font-weight: 700;
+    position: relative;
+    color: #fff;
+}
+.effect-spaced-glitch::before,
+.effect-spaced-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0; top: 0;
+    color: #f0f;
+    clip-path: polygon(0 0,100% 0,100% 33%,0 33%);
+}
+.effect-spaced-glitch::after {
+    color:#0ff; 
+    clip-path: polygon(0 33%,100% 33%,100% 66%,0 66%);
+}
+
+.effect-skew-thin {
+    font-weight: 200;
+    transform: skewX(-20deg);
+    -webkit-text-stroke: 1px #ff0;
+    color: #000;
+}
+
+.effect-bold-uppercase-pulse {
+    font-weight: 900;
+    text-transform: uppercase;
+    animation: pulse 1s infinite alternate;
+}
+/* Flee on Hover */
+.hover-flee {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.hover-flee:hover {
+    transform: translate(50px, -20px); /* moves right and up */
+}
+/* Flee off-screen on hover */
+.hover-flee-screen {
+    display: inline-block;
+    position: relative;
+    transition: transform 0.5s ease-in-out;
+    cursor: pointer;
+}
+
+.hover-flee-screen:hover {
+    transform: translateX(200vw) translateY(-50vh); /* move far outside viewport */
+}
+
+</style>
+<script src="assets/js/demo-auth.js" defer></script></head>
+<body>
+<h2>Font Demo Table ( Fonts)</h2>
+<label>Search: <input type="search" id="fontSearch" placeholder="Filter fonts..."></label>
+<table id="fontTable">
+<thead>
+<tr>
+<th>#</th>
+<th>Font Name</th>
+<th>Category</th>
+<th>Example</th>
+<th>Size</th>
+<th>+</th>
+<th>-</th>
+<th>Color</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td class="sample-text" style="font-family:''">Lorem ipsum dolor sit amet</td>
+<td><span class="sizeVal">16</span>px</td>
+<td><button class="rowInc">+</button></td>
+<td><button class="rowDec">-</button></td>
+<td><input type="color" value="#ffffff" class="colorPicker"></td>
+</tr>
+
+</tbody>
+</table>
+
+<h2>Effects Playground</h2>
+<label>Font: 
+<select id="playgroundFont">
+
+</select>
+</label>
+<span style="margin-left:1rem;">Size: <button id="playInc">+</button><button id="playDec">-</button></span>
+<input type="color" id="playColor" value="#ffffff">
+<div id="playgroundText" class="sample-text effect-wave" data-text="The quick brown fox jumps over the lazy dog" style="font-family:Roboto; font-size:24px; display:block; margin-top:1rem;">The quick brown fox jumps over the lazy dog</div>
+
+<div style="margin-top:1rem;" id="effectsBlock">
+<p class="effect-neon sample-text">Neon Glow</p><br>
+<p class="effect-rainbow sample-text">Rainbow Gradient</p><br>
+<p class="effect-glitch sample-text" data-text="Glitch Effect">Glitch Effect</p><br>
+<p class="effect-shadow sample-text">Color Shadow</p><br>
+<p class="effect-skew sample-text">Skewed Text</p><br>
+<p class="effect-rotate sample-text">Rotated Text</p><br>
+<p class="effect-blur sample-text">Blurred Text</p><br>
+<p class="effect-outline sample-text">Outlined Text</p><br>
+<p class="effect-pulse sample-text">Pulse Animation</p><br>
+<p class="effect-wobble sample-text">Wobble Animation</p><br>
+<p class="effect-gradient-outline sample-text">Gradient Outline</p><br>
+<p class="effect-multishadow sample-text">Multi-Shadow Text</p><br>
+<p class="effect-tiltskew sample-text">Tilt & Skew</p><br>
+<p class="effect-bounce sample-text">Bounce Animation</p><br>
+<p class="effect-shake sample-text">Shake Animation</p><br>
+<p class="effect-fire sample-text">Fire Glow</p><br>
+<p class="effect-shadowpulse sample-text">Shadow Pulse</p><br>
+<p class="effect-jitter sample-text">Jitter</p><br>
+<p class="effect-flicker sample-text">Neon Flicker</p><br>
+
+<p class="sample-text hover-grow">Hover: Grow</p><br>
+<p class="sample-text hover-rotate">Hover: Rotate</p><br>
+<p class="sample-text hover-skew">Hover: Skew</p><br>
+<p class="sample-text hover-color">Hover: Color Change</p><br>
+<p class="sample-text hover-shadow">Hover: Shadow</p><br>
+<p class="effect-shake sample-text">Shake Animation</p><br>
+<p class="effect-bounce sample-text">Bounce Animation</p><br>
+<p class="effect-wiggle sample-text">Wiggle Animation</p><br>
+<p class="effect-flip sample-text">Flip Animation</p><br>
+<p class="effect-colorwave sample-text">Color Wave</p><br>
+<p class="effect-drip sample-text">Drip Effect</p><br>
+<p class="effect-spin sample-text">Spin Animation</p><br>
+<p class="effect-wavytext sample-text">Wavy Text</p><br>
+<p class="effect-float sample-text">Float Animation</p><br>
+<p class="effect-zoompulse sample-text">Zoom Pulse</p><br>
+<p class="effect-runaway sample-text">Runaway Right</p><br>
+<p class="effect-fleeleft sample-text">Flee Left</p><br>
+<p class="effect-flyup sample-text">Fly Up</p><br>
+<p class="effect-flydown sample-text">Fly Down</p><br>
+<p class="effect-vanish sample-text">Vanish Animation</p><br>
+<p class="effect-runaway-loop sample-text">Runaway Right Loop</p><br>
+<p class="effect-flyup-loop sample-text">Fly Up Loop</p><br>
+<p class="effect-vanish-loop sample-text">Jitter Vanish Loop</p><br>
+<p class="sample-text effect-bold-neon">Bold Neon Wobble</p><br>
+<p class="sample-text effect-italic-rainbow">Italic Rainbow Pulse</p><br>
+<p class="sample-text effect-spaced-glitch" data-text="Spaced Glitch">Spaced Glitch</p><br>
+<p class="sample-text effect-skew-thin">Skewed Thin Outline</p><br>
+<p class="sample-text effect-bold-uppercase-pulse">Bold Uppercase Pulse</p><br>
+<p class="sample-text hover-flee">Hover over me!</p><br>
+<p class="sample-text hover-flee-screen">Hover to make me flee off the screen!</p>
+
+
+
+
+
+
+
+</div>
+
+<script>
+const table = document.getElementById('fontTable');
+const searchInput = document.getElementById('fontSearch');
+const rowIncBtns = document.querySelectorAll('.rowInc');
+const rowDecBtns = document.querySelectorAll('.rowDec');
+const colorPickers = document.querySelectorAll('.colorPicker');
+
+// Table search filter
+searchInput.addEventListener('input',()=> {
+    const term = searchInput.value.toLowerCase();
+    Array.from(table.tBodies[0].rows).forEach(row=>{
+        const name=row.cells[1].textContent.toLowerCase();
+        const cat=row.cells[2].textContent.toLowerCase();
+        row.style.display=(name.includes(term)||cat.includes(term))?'':'none';
+    });
+});
+
+// Row font size adjustments
+rowIncBtns.forEach((btn,i)=>{
+    btn.addEventListener('click',()=>{ 
+        const szElem=table.tBodies[0].rows[i].querySelector('.sizeVal');
+        let sz=parseInt(szElem.textContent)+1;
+        szElem.textContent=sz;
+        table.tBodies[0].rows[i].querySelector('.sample-text').style.fontSize=sz+'px';
+    });
+});
+rowDecBtns.forEach((btn,i)=>{
+    btn.addEventListener('click',()=>{ 
+        const szElem=table.tBodies[0].rows[i].querySelector('.sizeVal');
+        let sz=parseInt(szElem.textContent)-1;
+        if(sz<6) sz=6;
+        szElem.textContent=sz;
+        table.tBodies[0].rows[i].querySelector('.sample-text').style.fontSize=sz+'px';
+    });
+});
+
+// Row color picker
+colorPickers.forEach((picker,i)=>{
+    picker.addEventListener('input',()=>{ 
+        table.tBodies[0].rows[i].querySelector('.sample-text').style.color=picker.value;
+    });
+});
+
+// Effects Playground
+const playFont=document.getElementById('playgroundFont');
+const playColor=document.getElementById('playColor');
+const playInc=document.getElementById('playInc');
+const playDec=document.getElementById('playDec');
+
+const effectElements = document.querySelectorAll('#playgroundText, #effectsBlock .sample-text');
+
+function updateEffectsFont() {
+    const font = playFont.value;
+    effectElements.forEach(el => {
+        el.style.fontFamily = font;
+        if(el.classList.contains('effect-glitch')) el.setAttribute('data-text', el.textContent);
+    });
+}
+
+playFont.addEventListener('change', updateEffectsFont);
+updateEffectsFont(); // initial set
+
+playColor.addEventListener('input', ()=>{
+    const color = playColor.value;
+    effectElements.forEach(el=>el.style.color=color);
+});
+
+playInc.addEventListener('click',()=>{
+    effectElements.forEach(el=>{
+        let sz=parseInt(window.getComputedStyle(el).fontSize);
+        el.style.fontSize=(sz+1)+'px';
+    });
+});
+playDec.addEventListener('click',()=>{
+    effectElements.forEach(el=>{
+        let sz=parseInt(window.getComputedStyle(el).fontSize);
+        if(sz>6) el.style.fontSize=(sz-1)+'px';
+    });
+});
+</script>
+<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+</html>
+

@@ -1,0 +1,874 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Keep App — UWEC Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f7f7f7; 
+            overflow-x: hidden;
+        }
+        .note-card { 
+            overflow: hidden; 
+            min-width: 14rem; 
+            min-height: 10rem; 
+            width: 100%; 
+            height: auto; 
+            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out; 
+            cursor: default;
+            position: relative; 
+            user-select: none;
+        }
+        .note-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+        }
+        .card-scrollbar { 
+            overflow-y: auto; 
+            max-height: 50vh; 
+            padding-bottom: 0.5rem; 
+        }
+        .card-scrollbar::-webkit-scrollbar { width: 8px; }
+        .card-scrollbar::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
+        .card-scrollbar::-webkit-scrollbar-track { background-color: transparent; }
+        .drag-handle-card { cursor: grab; color: #9ca3af; }
+        .drag-handle-item { cursor: grab; color: #9ca3af; transition: color 0.15s; }
+        .drag-handle-item:hover { color: #4b5563; }
+        .list-none { list-style: none; }
+        .checklist-divider {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 0.5rem 0;
+        }
+        .modal-resizable {
+            position: relative; 
+            width: 90%; 
+            max-width: 40rem; 
+            transition: all 0.2s ease-in-out;
+            overflow: hidden;
+            height: auto;
+            max-height: 90vh; 
+        }
+        .modal-resizable.resizing {
+            transition: none !important;
+            user-select: none;
+        }
+        .resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 15px;
+            height: 15px;
+            background-color: transparent;
+            cursor: se-resize;
+            z-index: 10;
+        }
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .drop-indicator {
+            height: 2px;
+            background-color: #3b82f6;
+            margin: 2px 0;
+            border-radius: 1px;
+        }
+        .collapsed {
+            display: none;
+        }
+        .dragging-item {
+            opacity: 0.6;
+            background-color: #fef3c7;
+        }
+    </style>
+<script src="assets/js/demo-auth.js" defer></script></head>
+<body class="p-4 md:p-8">
+    <div id="loading-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-30 hidden items-center justify-center z-50">
+        <div class="flex items-center space-x-2 text-gray-700 bg-white p-4 rounded-lg shadow-xl">
+            <div class="w-6 h-6 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin"></div>
+            <span>Saving and refreshing note...</span>
+        </div>
+    </div>
+
+    <header class="mb-10 text-center">
+        <h1 class="text-4xl font-extrabold text-gray-800 flex items-center justify-center">
+            <i class="fas fa-thumbtack text-yellow-500 mr-3"></i>
+            Gemini Keep
+        </h1>
+        <p class="text-gray-500 mt-1">A simple, feature-rich notes and checklist app static demo.</p>
+    </header>
+
+    <div class="w-full flex justify-center mb-12">
+        <div class="flex space-x-4">
+            <button 
+                onclick="openAddModal()"
+                class="bg-white p-3 rounded-full shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow text-gray-600 focus:outline-none"
+            >
+                <span class="text-lg px-6 py-1 flex items-center">
+                    <i class="fas fa-plus mr-3 text-yellow-500"></i> Take a note...
+                </span>
+            </button>
+            
+            <button 
+                onclick="downloadJsonBackup()"
+                class="bg-green-500 text-white p-3 rounded-full shadow-xl border border-gray-100 hover:bg-green-600 transition-colors focus:outline-none"
+                title="Download all notes as a JSON backup file"
+            >
+                <span class="text-lg px-2 py-1 flex items-center">
+                    <i class="fas fa-download mr-3"></i> Download All Notes (JSON)
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <main id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        
+            <div class="lg:col-span-4 text-center py-20 text-gray-500">
+                <i class="fas fa-lightbulb h-12 w-12 mx-auto mb-3 text-6xl"></i>
+                <p class="text-lg mt-3">No notes yet. Click "Take a note..." to start!</p>
+            </div>
+        
+            
+                
+                <div
+                    class="note-card p-4 pt-4 rounded-xl shadow-lg border-t-4 border-b-2 hover:shadow-xl   "
+                    data-id=""
+                    data-type=""
+                    data-color=""
+                    data-size=""
+                    data-custom-width=""
+                    data-title=""
+                    data-raw-content=""
+                    ondrop="dropCard(event)"
+                    ondragover="allowCardDrop(event)"
+                    
+                    id="note-card-"
+                >
+                    <div class="absolute top-1 right-1 flex space-x-1">
+                        <i 
+                            class="fas fa-compress-arrows-alt text-gray-500 hover:text-gray-800 transition cursor-pointer p-1" 
+                            title="Collapse/Expand All Items" 
+                            onclick="event.stopPropagation(); toggleAllItems('')"
+                        ></i>
+                        <i 
+                            class="fas  text-gray-500 hover:text-gray-800 transition cursor-pointer p-1" 
+                            title="" 
+                            onclick="event.stopPropagation(); toggleNoteSize('')"
+                        ></i>
+                        <i 
+                            class="fas fa-pencil-alt text-gray-500 hover:text-gray-800 transition cursor-pointer p-1" 
+                            title="Edit Note" 
+                            onclick="event.stopPropagation(); openEditModal(this.closest('.note-card'))"
+                        ></i>
+                        <i 
+                            class="fas fa-grip-vertical drag-handle-card p-1" 
+                            title="Drag to reorder card" 
+                            draggable="true"
+                            ondragstart="dragCardStart(event)"
+                            ondragend="dragCardEnd(event)"
+                            onclick="event.stopPropagation()"
+                        ></i>
+                    </div>
+
+                    <h2 class="text-lg font-bold mt-5 mb-2 break-words text-gray-800">
+                        
+                    </h2>
+
+                    <div class="text-sm text-gray-700 note-content-container card-scrollbar" id="note-content-">
+                        
+                             
+                        
+                            <p class="whitespace-pre-wrap break-words"></p>
+                        
+                    </div>
+
+                    <div class="text-xs text-right text-gray-500 mt-2 border-t pt-2 flex flex-col items-end space-y-0.5">
+                        <span class="font-medium">CREATED: </span>
+                        
+                            <span class="font-medium">LAST EDIT: </span>
+                        
+                    </div>
+                </div>
+            
+        
+    </main>
+
+    <!-- Add Note Modal -->
+    <div id="add-modal-backdrop" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div id="add-modal" class="modal-resizable bg-white rounded-xl shadow-2xl transition-all duration-300" onclick="event.stopPropagation()">
+            <form id="add-note-form" method="POST" class="p-6 h-full flex flex-col">
+                <input type="hidden" name="action" value="add">
+                <input type="hidden" name="type" id="add-note-type" value="note">
+                <input type="hidden" name="color" id="add-note-color" value="white">
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                    required
+                    class="w-full text-2xl font-bold mb-3 p-1 focus:outline-none placeholder-gray-400"
+                >
+                <textarea
+                    name="content"
+                    rows="8"
+                    placeholder="Take a note... (For checklists: use new lines for items, and two spaces '  ' for indentation to create nested groups.)"
+                    required
+                    class="w-full resize-none text-gray-700 p-1 mb-4 focus:outline-none flex-grow"
+                    style="min-height: 5rem;"
+                ></textarea>
+
+                <div class="flex justify-between items-center border-t pt-4 flex-shrink-0">
+                    <div id="add-color-picker" class="flex space-x-3">
+                        
+                            <div
+                                class="w-7 h-7 rounded-full cursor-pointer shadow-md "
+                                onclick="selectColor('add', '')"
+                                data-color=""
+                            ></div>
+                        
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <button
+                            type="button"
+                            onclick="closeAddModal()"
+                            class="px-4 py-2 text-sm text-gray-600 font-medium rounded-full hover:bg-gray-200 transition"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            id="add-type-toggle"
+                            onclick="toggleNoteType('add')"
+                            class="px-3 py-1 text-sm rounded-full text-gray-600 hover:bg-gray-100 transition"
+                            title="Toggle Note/Checklist"
+                        >
+                            <i class="fas fa-list-ul mr-1"></i> Note
+                        </button>
+                        <button
+                            type="submit"
+                            class="px-4 py-2 text-sm bg-yellow-500 text-gray-800 font-medium rounded-full hover:bg-yellow-600 transition shadow-md"
+                        >
+                            Save & Close
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="resize-handle" onmousedown="startResize(event, 'add-modal')"></div>
+        </div>
+    </div>
+
+    <!-- Edit Note Modal -->
+    <div id="edit-modal-backdrop" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50 p-4">
+        <div id="edit-modal" class="modal-resizable bg-white rounded-xl shadow-2xl transition-all duration-300" onclick="event.stopPropagation()">
+            <form id="edit-note-form" method="POST" class="p-6 h-full flex flex-col">
+                <input type="hidden" name="action" value="edit">
+                <input type="hidden" name="id" id="edit-note-id">
+                <input type="hidden" name="type" id="edit-note-type">
+                <input type="hidden" name="color" id="edit-note-color">
+
+                <input
+                    type="text"
+                    name="title"
+                    id="edit-title"
+                    required
+                    class="w-full text-2xl font-bold mb-3 p-1 focus:outline-none placeholder-gray-400"
+                >
+                <textarea
+                    name="content"
+                    id="edit-content"
+                    rows="8"
+                    placeholder="Note content or checklist items, one per line (use two spaces '  ' for indentation to create nested groups)."
+                    required
+                    class="w-full resize-none text-gray-700 p-1 mb-4 focus:outline-none flex-grow"
+                    style="min-height: 5rem;"
+                ></textarea>
+
+                <div class="flex justify-between items-center border-t pt-4 flex-shrink-0">
+                    <div id="edit-color-picker" class="flex space-x-3">
+                        
+                            <div
+                                id="edit-color-"
+                                class="w-7 h-7 rounded-full cursor-pointer shadow-md "
+                                onclick="selectColor('edit', '')"
+                                data-color=""
+                            ></div>
+                        
+                    </div>
+
+                    <div class="flex space-x-3">
+                        <button
+                            type="button"
+                            onclick="closeEditModal()"
+                            class="px-4 py-2 text-sm text-gray-600 font-medium rounded-full hover:bg-gray-200 transition"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            id="edit-type-toggle"
+                            onclick="toggleNoteType('edit')"
+                            class="px-3 py-1 text-sm rounded-full text-gray-600 hover:bg-gray-100 transition"
+                            title="Toggle Note/Checklist"
+                        >
+                            <i class="fas fa-list-ul mr-1"></i> Note
+                        </button>
+                        <button
+                            type="button"
+                            onclick="deleteNote()"
+                            class="px-4 py-2 text-sm bg-red-500 text-white font-medium rounded-full hover:bg-red-600 transition shadow-md"
+                        >
+                            Delete
+                        </button>
+                        <button
+                            type="submit"
+                            class="px-4 py-2 text-sm bg-yellow-500 text-gray-800 font-medium rounded-full hover:bg-yellow-600 transition shadow-md"
+                        >
+                            Save & Close
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="resize-handle" onmousedown="startResize(event, 'edit-modal')"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Forms -->
+    <form id="reorder-card-form" method="POST" style="display: none;">
+        <input type="hidden" name="action" value="reorder">
+        <input type="hidden" name="order" id="reorder-card-order-input">
+    </form>
+    <form id="toggle-size-form" method="POST" style="display: none;">
+        <input type="hidden" name="action" value="toggle_size">
+        <input type="hidden" name="id" id="toggle-size-id-input">
+    </form>
+    <form id="download-json-form" method="POST" style="display: none;">
+        <input type="hidden" name="action" value="download_json">
+    </form>
+    <form id="change-indent-form" method="POST" style="display: none;">
+        <input type="hidden" name="action" value="change_indent">
+        <input type="hidden" name="id" id="change-indent-note-id">
+        <input type="hidden" name="item_index" id="change-indent-item-index">
+        <input type="hidden" name="direction" id="change-indent-direction">
+    </form>
+
+    <script>
+        const noteColors = ;
+        
+        const loadingOverlay = document.getElementById('loading-overlay');
+        function showLoading() { loadingOverlay.classList.remove('hidden'); loadingOverlay.classList.add('flex'); }
+        function hideLoading() { loadingOverlay.classList.add('hidden'); loadingOverlay.classList.remove('flex'); }
+        
+        function downloadJsonBackup() {
+            document.getElementById('download-json-form').submit();
+        }
+
+        // Modal Functions
+        function openAddModal() {
+            document.getElementById('add-note-form').reset();
+            selectColor('add', 'white'); 
+            document.getElementById('add-note-type').value = 'note';
+            toggleNoteType('add', true); 
+            
+            document.getElementById('add-modal-backdrop').classList.remove('hidden');
+            document.getElementById('add-modal-backdrop').classList.add('flex');
+            document.querySelector('#add-note-form input[name="title"]').focus();
+
+            const modal = document.getElementById('add-modal');
+            modal.style.width = ''; 
+            modal.style.height = ''; 
+            modal.classList.remove(...Object.values(noteColors).flatMap(cls => cls.split(' ').filter(c => cls.includes('bg-'))));
+            modal.classList.add('bg-white');
+        }
+
+        function closeAddModal() {
+            document.getElementById('add-modal-backdrop').classList.add('hidden');
+            document.getElementById('add-modal-backdrop').classList.remove('flex');
+            stopResize();
+        }
+
+        function openEditModal(cardElement) {
+            const id = cardElement.dataset.id;
+            const title = cardElement.dataset.title;
+            const color = cardElement.dataset.color;
+            const type = cardElement.dataset.type;
+            const rawContent = cardElement.dataset.rawContent;
+
+            document.getElementById('edit-note-id').value = id;
+            document.getElementById('edit-title').value = title;
+            document.getElementById('edit-note-type').value = type;
+            document.getElementById('edit-content').value = rawContent;
+            
+            toggleNoteType('edit', true); 
+            selectColor('edit', color);
+
+            document.getElementById('edit-modal-backdrop').classList.remove('hidden');
+            document.getElementById('edit-modal-backdrop').classList.add('flex');
+            document.getElementById('edit-title').focus();
+            
+            const modal = document.getElementById('edit-modal');
+            modal.style.width = ''; 
+            modal.style.height = '';
+            
+            Object.values(noteColors).map(cls => cls.split(' ').filter(c => cls.includes('bg-'))).flat().forEach(cls => modal.classList.remove(cls));
+            const bgColorClass = noteColors[color].split(' ').find(c => c.startsWith('bg-'));
+            if (bgColorClass) {
+                modal.classList.add(bgColorClass);
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal-backdrop').classList.add('hidden');
+            document.getElementById('edit-modal-backdrop').classList.remove('flex');
+            stopResize();
+        }
+
+        function selectColor(prefix, colorKey) {
+            document.getElementById(`${prefix}-note-color`).value = colorKey;
+
+            const colorPicker = document.getElementById(`${prefix}-color-picker`);
+            colorPicker.querySelectorAll('div').forEach(div => {
+                if (div.dataset.color === colorKey) {
+                    div.classList.add('ring-2', 'ring-offset-2', 'ring-gray-800');
+                } else {
+                    div.classList.remove('ring-2', 'ring-offset-2', 'ring-gray-800');
+                }
+            });
+
+            const modal = document.getElementById(`${prefix}-modal`);
+            if (modal) {
+                const allBgClasses = Object.values(noteColors).flatMap(cls => cls.split(' ').filter(c => c.includes('bg-')));
+                allBgClasses.forEach(cls => modal.classList.remove(cls));
+
+                const bgColorClass = noteColors[colorKey].split(' ').find(c => c.startsWith('bg-'));
+                if (bgColorClass) {
+                    modal.classList.add(bgColorClass);
+                }
+            }
+        }
+
+        function toggleNoteType(prefix, forceRun = false) {
+            const typeInput = document.getElementById(`${prefix}-note-type`);
+            const toggleButton = document.getElementById(`${prefix}-type-toggle`);
+            const contentTextarea = document.querySelector(`#${prefix}-modal textarea`);
+            
+            const isNote = typeInput.value === 'note';
+
+            if (!forceRun) {
+                typeInput.value = isNote ? 'list' : 'note';
+            }
+
+            const currentType = typeInput.value;
+
+            if (currentType === 'note') {
+                toggleButton.innerHTML = '<i class="fas fa-list-ul mr-1"></i> Note';
+                contentTextarea.placeholder = "Take a note...";
+            } else {
+                toggleButton.innerHTML = '<i class="fas fa-sticky-note mr-1"></i> Checklist';
+                contentTextarea.placeholder = "Checklist items, one per line (use two spaces '  ' for indentation to create nested groups)...";
+            }
+        }
+
+        // Resizing Logic
+        let isResizing = false;
+        let startX, startY, startWidth, startHeight, currentModal;
+        const minModalWidth = 300;
+        const minModalHeight = 200;
+
+        function startResize(e, modalId) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            currentModal = document.getElementById(modalId);
+            if (!currentModal) return;
+
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            
+            startWidth = currentModal.offsetWidth; 
+            startHeight = currentModal.offsetHeight;
+
+            currentModal.classList.add('resizing');
+            
+            document.addEventListener('mousemove', doResize);
+            document.addEventListener('mouseup', stopResize);
+        }
+
+        function doResize(e) {
+            if (!isResizing || !currentModal) return;
+
+            const newWidth = startWidth + (e.clientX - startX);
+            const newHeight = startHeight + (e.clientY - startY);
+            
+            if (newWidth >= minModalWidth) {
+                currentModal.style.width = `${newWidth}px`;
+                currentModal.style.maxWidth = 'none'; 
+            }
+            
+            const maxVisibleHeight = window.innerHeight * 0.9;
+            if (newHeight >= minModalHeight && newHeight <= maxVisibleHeight) {
+                currentModal.style.height = `${newHeight}px`;
+            } else if (newHeight > maxVisibleHeight) {
+                currentModal.style.height = `${maxVisibleHeight}px`;
+            }
+        }
+
+        function stopResize() {
+            if (!isResizing) return;
+            isResizing = false;
+            
+            currentModal.classList.remove('resizing');
+
+            document.removeEventListener('mousemove', doResize);
+            document.removeEventListener('mouseup', stopResize);
+            currentModal = null;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            selectColor('add', 'white'); 
+        });
+
+        function deleteNote() {
+            const id = document.getElementById('edit-note-id').value;
+            
+            const tempForm = document.createElement('form');
+            tempForm.method = 'POST';
+            tempForm.action = '';
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'delete';
+            tempForm.appendChild(actionInput);
+
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'id';
+            idInput.value = id;
+            tempForm.appendChild(idInput);
+
+            document.body.appendChild(tempForm);
+            tempForm.submit();
+        }
+        
+        // AJAX Toggle Item
+        async function toggleItem(noteId, itemIndex) {
+            showLoading();
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'toggle_item');
+                formData.append('id', noteId);
+                formData.append('item_index', itemIndex);
+
+                const response = await fetch('', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest' 
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server returned status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const contentContainer = document.getElementById(`note-content-${result.id}`);
+                    const cardElement = document.getElementById(`note-card-${result.id}`);
+                    
+                    if (contentContainer && cardElement) {
+                        contentContainer.innerHTML = result.html;
+                        
+                        if (result.is_completed) {
+                            cardElement.classList.add('opacity-70');
+                        } else {
+                            cardElement.classList.remove('opacity-70');
+                        }
+                    }
+                } else {
+                    console.error('AJAX response failed:', result.message);
+                }
+
+            } catch (error) {
+                console.error("Error toggling list item (AJAX):", error);
+                alert("An error occurred while saving. Please refresh the page.");
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        function toggleNoteSize(noteId) {
+            const idInput = document.getElementById('toggle-size-id-input');
+            idInput.value = noteId;
+            
+            const form = document.getElementById('toggle-size-form');
+            form.submit();
+        }
+
+        // SIMPLIFIED Collapse/Expand Functions - RELIABLE
+        function toggleGroup(chevronElement, itemIndex, noteId) {
+            const itemWrapper = chevronElement.closest('.list-item-wrapper');
+            const currentIndent = parseInt(itemWrapper.dataset.indentLevel) || 0;
+            const chevronIcon = chevronElement.querySelector('i');
+            
+            // Find all subsequent items with greater indent level
+            const allItems = Array.from(itemWrapper.parentElement.querySelectorAll('.list-item-wrapper'));
+            const startIndex = allItems.indexOf(itemWrapper);
+            const itemsToToggle = [];
+            
+            for (let i = startIndex + 1; i < allItems.length; i++) {
+                const item = allItems[i];
+                const itemIndent = parseInt(item.dataset.indentLevel) || 0;
+                
+                if (itemIndent > currentIndent) {
+                    itemsToToggle.push(item);
+                } else {
+                    break;
+                }
+            }
+            
+            if (itemsToToggle.length > 0) {
+                const isExpanded = chevronIcon.classList.contains('fa-chevron-down');
+                
+                if (isExpanded) {
+                    // Collapsing - hide all descendants
+                    itemsToToggle.forEach(item => {
+                        item.style.display = 'none';
+                    });
+                    chevronIcon.classList.remove('fa-chevron-down');
+                    chevronIcon.classList.add('fa-chevron-right');
+                } else {
+                    // Expanding - show all descendants
+                    itemsToToggle.forEach(item => {
+                        item.style.display = '';
+                    });
+                    chevronIcon.classList.remove('fa-chevron-right');
+                    chevronIcon.classList.add('fa-chevron-down');
+                }
+            }
+        }
+
+        function toggleAllItems(noteId) {
+            const noteCard = document.getElementById(`note-card-${noteId}`);
+            const allChevrons = noteCard.querySelectorAll('.list-item-wrapper button');
+            
+            // Check if any groups are currently expanded
+            let hasExpandedGroups = false;
+            allChevrons.forEach(btn => {
+                const icon = btn.querySelector('i');
+                if (icon.classList.contains('fa-chevron-down')) {
+                    hasExpandedGroups = true;
+                }
+            });
+            
+            // Toggle all groups
+            allChevrons.forEach(btn => {
+                const icon = btn.querySelector('i');
+                if (hasExpandedGroups) {
+                    // Collapse all
+                    if (icon.classList.contains('fa-chevron-down')) {
+                        toggleGroup(btn, 0, noteId);
+                    }
+                } else {
+                    // Expand all  
+                    if (icon.classList.contains('fa-chevron-right')) {
+                        toggleGroup(btn, 0, noteId);
+                    }
+                }
+            });
+        }
+
+        // Indentation Controls
+        function changeIndentation(noteId, itemIndex, direction) {
+            document.getElementById('change-indent-note-id').value = noteId;
+            document.getElementById('change-indent-item-index').value = itemIndex;
+            document.getElementById('change-indent-direction').value = direction;
+            
+            document.getElementById('change-indent-form').submit();
+        }
+        
+        // Card Drag and Drop
+        let draggedCard = null;
+
+        function dragCardStart(ev) {
+            const cardDragHandle = ev.target.closest('.drag-handle-card');
+            if (!cardDragHandle) { ev.preventDefault(); return; }
+
+            draggedCard = cardDragHandle.closest('.note-card');
+            ev.dataTransfer.setData("text/plain", draggedCard.dataset.id);
+            draggedCard.classList.add('opacity-50', 'ring-4', 'ring-yellow-500');
+            ev.stopPropagation();
+        }
+        
+        function dragCardEnd(ev) { 
+            if (draggedCard) { 
+                draggedCard.classList.remove('opacity-50', 'ring-4', 'ring-yellow-500'); 
+            } 
+            draggedCard = null; 
+        }
+        
+        function allowCardDrop(ev) { 
+            ev.preventDefault(); 
+            if (draggedCard) { 
+                ev.stopPropagation(); 
+            } 
+        }
+        
+        function dropCard(ev) {
+            ev.preventDefault();
+            if (!draggedCard) return;
+            draggedCard.classList.remove('opacity-50', 'ring-4', 'ring-yellow-500');
+            let dropTarget = ev.target.closest('.note-card');
+            if (!dropTarget || dropTarget === draggedCard) return;
+
+            const grid = document.getElementById('notes-grid');
+            const targetIndex = Array.from(grid.children).indexOf(dropTarget);
+            const draggedIndex = Array.from(grid.children).indexOf(draggedCard);
+
+            if (draggedIndex < targetIndex) {
+                grid.insertBefore(draggedCard, dropTarget.nextSibling);
+            } else {
+                grid.insertBefore(draggedCard, dropTarget);
+            }
+
+            submitNewCardOrder();
+            draggedCard = null;
+        }
+
+        function submitNewCardOrder() {
+            const grid = document.getElementById('notes-grid');
+            const newOrder = Array.from(grid.children).map(card => card.dataset.id);
+            document.getElementById('reorder-card-order-input').value = JSON.stringify(newOrder);
+            document.getElementById('reorder-card-form').submit();
+        }
+
+        // RELIABLE List Item Drag and Drop - SINGLE ITEMS ONLY
+        let draggedListItem = null;
+        let dropIndicator = null;
+
+        function dragListItemStart(ev) {
+            const itemWrapper = ev.target.closest('.list-item-wrapper');
+            if (!itemWrapper) { ev.preventDefault(); return; }
+
+            draggedListItem = itemWrapper;
+            ev.dataTransfer.setData("text/plain", itemWrapper.dataset.itemIndex);
+            ev.stopPropagation();
+        }
+        
+        function dragListItemEnd(ev) { 
+            draggedListItem = null; 
+            if (dropIndicator) {
+                dropIndicator.remove();
+                dropIndicator = null;
+            }
+        }
+
+        function allowListItemDrop(ev) { 
+            ev.preventDefault(); 
+            ev.stopPropagation(); 
+            
+            if (!draggedListItem) return;
+            
+            const dropTarget = ev.target.closest('.list-item-wrapper') || ev.target.closest('ul');
+            if (!dropTarget) return;
+            
+            if (dropIndicator) {
+                dropIndicator.remove();
+            }
+            
+            const rect = dropTarget.getBoundingClientRect();
+            const mouseY = ev.clientY;
+            const isListItem = dropTarget.classList.contains('list-item-wrapper');
+            
+            dropIndicator = document.createElement('div');
+            dropIndicator.className = 'drop-indicator';
+            
+            if (isListItem) {
+                const insertAfter = mouseY > (rect.top + rect.height / 2);
+                
+                if (insertAfter) {
+                    dropTarget.parentNode.insertBefore(dropIndicator, dropTarget.nextSibling);
+                } else {
+                    dropTarget.parentNode.insertBefore(dropIndicator, dropTarget);
+                }
+            } else {
+                dropTarget.appendChild(dropIndicator);
+            }
+        }
+        
+        function dropListItem(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            if (!draggedListItem) return;
+
+            if (dropIndicator) {
+                dropIndicator.remove();
+                dropIndicator = null;
+            }
+
+            const dropTarget = ev.target.closest('.list-item-wrapper') || ev.target.closest('ul');
+            if (!dropTarget || dropTarget === draggedListItem) return;
+
+            const parentList = dropTarget.closest('ul');
+            if (!parentList) return;
+            
+            const isListItem = dropTarget.classList.contains('list-item-wrapper');
+            let referenceNode = null;
+
+            if (isListItem) {
+                const rect = dropTarget.getBoundingClientRect();
+                const mouseY = ev.clientY;
+                const insertAfter = mouseY > (rect.top + rect.height / 2);
+                
+                referenceNode = insertAfter ? dropTarget.nextSibling : dropTarget;
+            } else {
+                referenceNode = null;
+            }
+
+            parentList.insertBefore(draggedListItem, referenceNode);
+            submitReorderedList(draggedListItem);
+        }
+
+        function submitReorderedList(movedItem) {
+            const noteCard = movedItem.closest('.note-card');
+            const noteId = noteCard.dataset.id;
+
+            const allItems = Array.from(noteCard.querySelectorAll('.list-item-wrapper'));
+            const listContentString = allItems.map(item => {
+                const textElement = item.querySelector('span');
+                const isChecked = item.querySelector('.fa-check-square') !== null;
+                const indent = parseInt(item.dataset.indentLevel) * 2; 
+                
+                const prefix = isChecked ? 'âœ“ ' : '';
+                return ' '.repeat(indent) + prefix + textElement.textContent.trim();
+            }).join('\n');
+            
+            document.getElementById('edit-note-id').value = noteId;
+            document.getElementById('edit-title').value = noteCard.dataset.title;
+            document.getElementById('edit-note-type').value = noteCard.dataset.type;
+            document.getElementById('edit-note-color').value = noteCard.dataset.color;
+            document.getElementById('edit-content').value = listContentString;
+
+            document.getElementById('edit-note-form').submit();
+        }
+    </script>
+<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+</html>
