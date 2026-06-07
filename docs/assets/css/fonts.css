@@ -3,6 +3,12 @@
 .font-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; justify-content: center; }
 .font-nav a { padding: 6px 12px; border-radius: 999px; background: #161b22; color: #ccc; text-decoration: none; font-size: 0.9em; }
 .font-nav a:hover, .font-nav a.active { background: #2a2a5a; color: #fff; }
+.font-toolbar { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin: 16px 0; padding: 16px; background: #161b22; border-radius: 12px; }
+.font-toolbar label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85em; color: #aaa; }
+.font-toolbar input[type=text] { padding: 8px 12px; border-radius: 8px; border: 1px solid #333; background: #0d1117; color: #eee; font-size: 1rem; min-width: 200px; }
+.font-toolbar button, .font-btn { padding: 6px 12px; cursor: pointer; border-radius: 6px; border: 1px solid #444; background: #252525; color: #eee; }
+.font-loading { color: #8af; padding: 24px; text-align: center; }
+.font-error { color: #f88; padding: 16px; background: #2a1515; border-radius: 8px; }
 .font-nav small { opacity: 0.7; }
 .font-lead { color: #aaa; margin-bottom: 16px; }
 .font-search input { padding: 8px 12px; border-radius: 8px; border: 1px solid #333; background: #161b22; color: #eee; width: min(100%, 320px); }
