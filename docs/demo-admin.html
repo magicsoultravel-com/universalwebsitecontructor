@@ -3,40 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel â€” UWEC Demo</title>
+<title>Admin Panel — UWEC Demo</title>
 <link rel="stylesheet" href="assets/css/main.css">
 <script src="assets/js/demo-auth.js" defer></script>
+<script src="assets/js/demo-data.js" defer></script>
 </head>
-<body>
+<body data-demo="admin">
 <main class="container">
 <h1>Admin Panel</h1>
-<p class="demo-note">Click "Login as Demo Admin" in the footer first.</p>
-<ul id="admin-tools">
-<li><a href="#" data-tool="content-manager">content manager</a></li>
-<li><a href="#" data-tool="style-manager">style manager</a></li>
-<li><a href="#" data-tool="menu-manager">menu manager</a></li>
-<li><a href="#" data-tool="file-browser">file browser</a></li>
-<li><a href="#" data-tool="gallery">gallery admin</a></li>
-<li><a href="#" data-tool="backup">backup</a></li>
-<li><a href="#" data-tool="notepad">notepad</a></li>
-<li><a href="#" data-tool="inventory">inventory</a></li>
-</ul>
-<div id="admin-preview" style="display:none;margin-top:20px;padding:16px;background:#1a1a1a;border-radius:12px"></div>
+<p class="demo-note">Login as Demo Admin · click tools to select · export localStorage state.</p>
+<button type="button" id="export-demo" class="demo-btn">Export demo data (JSON)</button>
+<div id="module-root"></div>
 </main>
 <div id="demo-auth-footer"></div>
-<script>
-document.addEventListener('DOMContentLoaded',()=>{
-  DemoAuth.renderFooter('#demo-auth-footer');
-  document.querySelectorAll('[data-tool]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      e.preventDefault();
-      if(!DemoAuth.isAdmin()){ alert('Login as Demo Admin first (footer).'); return; }
-      const box=document.getElementById('admin-preview');
-      box.style.display='block';
-      box.innerHTML='<h3>'+a.dataset.tool+'</h3><p>Admin UI preview â€” static demo only.</p>';
-    });
-  });
-});
-</script>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth.renderFooter('#demo-auth-footer'));</script>
 </body>
 </html>

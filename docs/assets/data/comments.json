@@ -1,0 +1,8 @@
+{
+  "messages": [
+    {"user": "Alex", "text": "Layout switcher is smooth — love the scrollytelling mode.", "date": "2025-06-01 18:22"},
+    {"user": "Sam", "text": "Checklist localStorage save works great for quick todos.", "date": "2025-06-02 09:05"},
+    {"user": "Jordan", "text": "Caribbean connections matrix is exactly the kind of niche tool I wanted to demo.", "date": "2025-06-03 21:40"},
+    {"user": "Demo Admin", "text": "Logged in and added a dev blog post — nice.", "date": "2025-06-04 12:15"}
+  ]
+}

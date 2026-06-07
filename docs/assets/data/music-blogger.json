@@ -1,11 +1,9 @@
 [
-    {
-        "id": "68bc83a128c0f",
-        "date": "2025-09-06 18:55:29",
-        "title": "Zioum",
-        "content": "Carnival classic from Martnique",
-        "artist": "Jean-Philippe Marth\u00e9ly",
-        "genre": "",
-        "links": "https:\/\/www.youtube.com\/watch?v=EPIZz19WX84"
-    }
+  {"id": "1", "date": "2025-05-01", "title": "Zioum", "artist": "Jean-Philippe Marthely", "genre": "Carnival / Zouk", "links": "https://www.youtube.com/watch?v=EPIZz19WX84"},
+  {"id": "2", "date": "2025-05-08", "title": "Hot Hot Hot", "artist": "Arrow", "genre": "Soca", "links": "https://www.youtube.com/watch?v=ZvR0asGr__M"},
+  {"id": "3", "date": "2025-05-15", "title": "Three Little Birds", "artist": "Bob Marley", "genre": "Reggae", "links": "https://www.youtube.com/watch?v=zaGUr6vhy04"},
+  {"id": "4", "date": "2025-05-22", "title": "Banana Boat (Day-O)", "artist": "Harry Belafonte", "genre": "Calypso", "links": "https://www.youtube.com/watch?v=PSAW77-aiuc"},
+  {"id": "5", "date": "2025-05-29", "title": "Rivers of Babylon", "artist": "Boney M.", "genre": "Disco / Reggae", "links": "https://www.youtube.com/watch?v=l9Q1rR9s79Y"},
+  {"id": "6", "date": "2025-06-01", "title": "Sail Away", "artist": "Tim Tim", "genre": "Soca", "links": "https://www.youtube.com/watch?v=6Ejga4kJUts"},
+  {"id": "7", "date": "2025-06-05", "title": "Island in the Sun", "artist": "Harry Belafonte", "genre": "Calypso", "links": "https://www.youtube.com/watch?v=G7BZT4XvCoE"}
 ]

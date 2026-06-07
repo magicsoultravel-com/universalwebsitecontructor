@@ -1,52 +1,19 @@
 {
     "mapGroups": [
         {
-            "color": "#00FFFF",
-            "name": "Turquoise Highlight Group",
-            "countries": [
-                "Ireland",
-                "Finland",
-                "Romania",
-                "Bulgaria",
-                "Austria",
-                "India",
-                "Russia", 
-                "Canada"
-            ]
+            "color": "#4ecdc4",
+            "name": "EU & North Atlantic hubs",
+            "countries": ["Ireland", "Finland", "Romania", "Bulgaria", "Austria", "United Kingdom", "Canada", "Portugal", "Spain", "France", "Belgium", "Netherlands", "Germany", "Italy", "Latvia", "Lithuania", "Greece", "Czechia", "Slovakia", "Denmark"]
         },
         {
-            "color": "#FF00FF",
-            "name": "Pink Focus Group",
-            "countries": [
-                "Denmark"
-            ]
+            "color": "#ff6b6b",
+            "name": "Caribbean & Gulf gateways",
+            "countries": ["Barbados", "Saint Lucia", "Mexico", "Qatar", "United Arab Emirates", "Egypt"]
         },
         {
-            "color": "#00FF00",
-            "name": "Pure Green Focus Group",
-            "countries": [
-                "Portugal",
-                "Spain",
-                "France",
-                "Belgium",
-                "Netherlands",
-                "Germany",
-                "Italy",
-                "Latvia",
-                "Lithuania",
-                "Greece",
-                "Turkey",
-                "Qatar",
-                "United Arab Emirates",
-                "Mexico",
-                "Thailand",
-                "Egypt",
-                "Barbados", 
-                "Saint Lucia", 
-                "United Kingdom",
-                "Czechia", 
-                "Slovakia" 
-            ]
+            "color": "#ffe66d",
+            "name": "Asia-Pacific sample",
+            "countries": ["India", "Thailand", "Russia", "Turkey"]
         }
     ]
 }

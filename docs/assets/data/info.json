@@ -1,0 +1,20 @@
+{
+  "sections": [
+    {
+      "title": "About UWEC",
+      "body": "Universal Website Constructor is a modular demo catalog. Each page showcases one feature — layouts, CMS snippets, maps, media, admin tools — as a standalone static HTML file."
+    },
+    {
+      "title": "How demos persist data",
+      "body": "Seed content lives in assets/data/*.json. When you edit checklists, comments, trips, or blog posts, changes save to localStorage in your browser only — nothing is sent to a server."
+    },
+    {
+      "title": "Admin demo",
+      "body": "Click Login as Demo Admin in the footer. This unlocks add buttons and the admin panel preview. There is no real authentication; it simulates an logged-in admin session for UI testing."
+    },
+    {
+      "title": "Extending modules",
+      "body": "Copy a demo HTML page, add JSON seed data, and wire a render function in assets/js/demo-data.js. Keep pages flat so the landing index remains the single entry point."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Harbour Café",
+  "subtitle": "Sample menu module — prices in PLN for demo variety",
+  "categories": [
+    {
+      "name": "Breakfast",
+      "items": [
+        {"name": "Shakshuka", "price": "32", "desc": "Eggs poached in spiced tomato sauce, sourdough"},
+        {"name": "Granola bowl", "price": "24", "desc": "Yoghurt, seasonal fruit, honey, almonds"}
+      ]
+    },
+    {
+      "name": "Lunch",
+      "items": [
+        {"name": "Grilled sea bass", "price": "58", "desc": "Fennel salad, lemon butter, new potatoes"},
+        {"name": "Roast vegetable tart", "price": "42", "desc": "Goat cheese, thyme, side salad"}
+      ]
+    },
+    {
+      "name": "Drinks",
+      "items": [
+        {"name": "Flat white", "price": "14", "desc": "Double ristretto, steamed oat milk"},
+        {"name": "Hibiscus iced tea", "price": "12", "desc": "House blend, lightly sweetened"},
+        {"name": "Rum punch (mock)", "price": "18", "desc": "Pineapple, lime, grenadine, sparkler"}
+      ]
+    }
+  ]
+}

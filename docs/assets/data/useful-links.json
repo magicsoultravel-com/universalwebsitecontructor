@@ -1,0 +1,7 @@
+[
+  {"url": "https://leafletjs.com/", "title": "Leaflet", "desc": "Maps used in choropleth & marker demos", "date": "2025-06-01"},
+  {"url": "https://fonts.google.com/", "title": "Google Fonts", "desc": "Font demo playground source", "date": "2025-06-01"},
+  {"url": "https://pages.github.com/", "title": "GitHub Pages", "desc": "Static hosting for this catalog", "date": "2025-06-02"},
+  {"url": "https://developer.mozilla.org/en-US/docs/Web/API/Clipboard_API", "title": "Clipboard API", "desc": "Browser paste in clipboard catcher demo", "date": "2025-06-03"},
+  {"url": "https://openstreetmap.org/", "title": "OpenStreetMap", "desc": "Tile layer attribution", "date": "2025-06-04"}
+]

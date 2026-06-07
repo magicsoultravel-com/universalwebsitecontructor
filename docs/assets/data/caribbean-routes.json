@@ -1,0 +1,17 @@
+{
+  "title": "Lesser Antilles Connections",
+  "updated": "2025-06-07",
+  "airports": ["SXM", "SKB", "PTP", "BGI", "GND"],
+  "airlines": [
+    {"code": "AF", "name": "Air France", "color": "#002395"},
+    {"code": "BA", "name": "British Airways", "color": "#075aaa"},
+    {"code": "BW", "name": "Caribbean Airlines", "color": "#e10000"}
+  ],
+  "routes": {
+    "SXM": {"SKB": {"duration": "35m", "airlines": ["BW"], "ferry": true}, "PTP": {"duration": "1h 15m", "airlines": ["AF"], "ferry": false}, "BGI": null, "GND": null},
+    "SKB": {"SXM": {"duration": "35m", "airlines": ["BW"], "ferry": true}, "PTP": null, "BGI": {"duration": "2h 10m", "airlines": ["BA"], "ferry": false}, "GND": null},
+    "PTP": {"SXM": {"duration": "1h 15m", "airlines": ["AF"], "ferry": false}, "SKB": null, "BGI": null, "GND": {"duration": "1h 45m", "airlines": ["AF"], "ferry": true}},
+    "BGI": {"SXM": null, "SKB": {"duration": "2h 10m", "airlines": ["BA"], "ferry": false}, "PTP": null, "GND": {"duration": "55m", "airlines": ["BW"], "ferry": false}},
+    "GND": {"SXM": null, "SKB": null, "PTP": {"duration": "1h 45m", "airlines": ["AF"], "ferry": true}, "BGI": {"duration": "55m", "airlines": ["BW"], "ferry": false}}
+  }
+}

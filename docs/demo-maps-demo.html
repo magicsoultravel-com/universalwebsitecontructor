@@ -12,28 +12,36 @@
 <body>
 <main class="container">
 <h1>Maps Demo</h1>
-<p class="demo-note">Static Leaflet map — click to add markers (saved in browser).</p>
+<p class="demo-note">Five seed markers (Caribbean + Europe) · click map to add more · saved in browser.</p>
 <div id="map" style="height:500px;border-radius:12px"></div>
-<button type="button" id="clear-markers" style="margin-top:12px">Clear markers</button>
+<button type="button" id="clear-markers" class="demo-btn">Clear all markers</button>
 </main>
 <div id="demo-auth-footer"></div>
 <script>
 const KEY = 'uwec-map-markers';
-document.addEventListener('DOMContentLoaded', () => {
-  const map = L.map('map').setView([51.5, -0.1], 4);
+document.addEventListener('DOMContentLoaded', async () => {
+  const map = L.map('map').setView([25, -40], 3);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
   const layer = L.layerGroup().addTo(map);
-  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } }
+  let seed = [];
+  try { seed = await (await fetch('assets/data/demo-markers.json')).json(); } catch (_) {}
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || seed; } catch { return seed; }
+  }
   function save(m) { localStorage.setItem(KEY, JSON.stringify(m)); }
   function redraw() {
     layer.clearLayers();
     load().forEach(m => L.marker([m.lat, m.lng]).addTo(layer).bindPopup(m.label || 'Marker'));
   }
   map.on('click', e => {
-    const label = prompt('Marker label') || 'Marker';
-    const m = load(); m.push({ lat: e.latlng.lat, lng: e.latlng.lng, label }); save(m); redraw();
+    const label = prompt('Marker label', 'New stop');
+    if (label === null) return;
+    const m = load();
+    m.push({ lat: e.latlng.lat, lng: e.latlng.lng, label: label || 'Marker' });
+    save(m); redraw();
   });
-  document.getElementById('clear-markers').onclick = () => { save([]); redraw(); };
+  document.getElementById('clear-markers').onclick = () => { if (confirm('Clear all markers?')) { save([]); redraw(); } };
+  if (!localStorage.getItem(KEY)) save(seed);
   redraw();
   DemoAuth.renderFooter('#demo-auth-footer');
 });

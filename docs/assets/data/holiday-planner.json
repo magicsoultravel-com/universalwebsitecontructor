@@ -1,0 +1,34 @@
+{
+  "dossiers": [
+    {
+      "id": "trip-1",
+      "name": "Lesser Antilles hop",
+      "departure": "2025-11-10",
+      "return": "2025-11-24",
+      "destination": "Saint Martin (SXM)",
+      "extra": "Saint Kitts, Guadeloupe",
+      "from": "London Gatwick",
+      "notes": "Book early SXM–PTP hop. Ferry SKB–Nevis if time allows."
+    },
+    {
+      "id": "trip-2",
+      "name": "Baltic autumn",
+      "departure": "2025-09-05",
+      "return": "2025-09-12",
+      "destination": "Tallinn",
+      "extra": "Helsinki day trip",
+      "from": "Warsaw",
+      "notes": "Old town walking tour. Try black bread ice cream."
+    },
+    {
+      "id": "trip-3",
+      "name": "Portugal coast",
+      "departure": "2026-03-01",
+      "return": "2026-03-08",
+      "destination": "Lisbon",
+      "extra": "Sintra, Cascais",
+      "from": "Berlin",
+      "notes": "Tram 28 early morning. Pastéis de nata benchmark run."
+    }
+  ]
+}

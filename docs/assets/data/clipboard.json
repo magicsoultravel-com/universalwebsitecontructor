@@ -1,0 +1,9 @@
+{
+  "items": [
+    {"title": "Brand palette", "description": "Primary #00005c, panels #1a1a1a", "type": "text", "size": "0.4 KB", "date": "2025-06-01"},
+    {"title": "Hero wireframe", "description": "Landing + 3-column feature grid sketch", "type": "image/png", "size": "128 KB", "date": "2025-06-02"},
+    {"title": "Choropleth config", "description": "EU + Caribbean country colour groups", "type": "application/json", "size": "2.1 KB", "date": "2025-06-03"},
+    {"title": "Meeting notes", "description": "Demo catalog structure — flat HTML pages", "type": "text", "size": "1.2 KB", "date": "2025-06-04"},
+    {"title": "Font shortlist", "description": "Georgia body, Inter for dashboards, Playfair headings", "type": "text", "size": "0.6 KB", "date": "2025-06-05"}
+  ]
+}

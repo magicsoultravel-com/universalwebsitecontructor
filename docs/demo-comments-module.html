@@ -3,45 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comments Module — UWEC Demo</title>
+<title>Comments — UWEC Demo</title>
 <link rel="stylesheet" href="assets/css/main.css">
 <script src="assets/js/demo-auth.js" defer></script>
+<script src="assets/js/demo-data.js" defer></script>
 </head>
-<body>
+<body data-demo="comments-module">
 <main class="container">
-<h1>Comments Module</h1>
-<p class="demo-note">Static demo page.</p>
-
-
-<section class="section shoutbox-section" id="shoutbox-section">
-    <h2>shoutout</h2>
-
-    
-        <form action="" method="post" class="shoutbox-form">
-            <textarea name="shout_message" placeholder="Type your message here..." rows="3" maxlength="255"></textarea>
-            <br>
-            <button type="submit" name="submit_shout">Post Shout</button>
-        </form>
-    
-        <p>Please log in to post messages in the shoutbox.</p>
-    
-
-    <div class="shouts-display">
-        
-            
-                <div class="shout-item">
-                    <p><strong>:</strong> </p>
-                    <small></small>
-                </div>
-            
-        
-            <p>No messages yet. Be the first to shout!</p>
-        
-    </div>
-</section>
-
+<h1>Shoutbox</h1>
+<p class="demo-note">Post shouts · four seed messages included.</p>
+<div id="module-root"></div>
 </main>
 <div id="demo-auth-footer"></div>
-<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth&&DemoAuth.renderFooter('#demo-auth-footer'));</script>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth.renderFooter('#demo-auth-footer'));</script>
 </body>
 </html>

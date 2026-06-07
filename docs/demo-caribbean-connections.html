@@ -1,79 +1,20 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #f0f8ff 0%, #e3f2fd 100%); color: #333; line-height: 1.6; }
-        .container { max-width: 1600px; margin: 0 auto; }
-        h1 { text-align: center; color: #1e3a8a; font-weight: 700; font-size: 2.5rem; margin-bottom: 10px; }
-        .header { text-align: center; font-size: 1rem; color: #64748b; margin: 10px 0 20px; }
-        .buttons { text-align: center; margin: 20px 0; }
-        .btn { background: #3b82f6; color: white; border: none; padding: 10px 20px; margin: 0 5px; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
-        .btn:hover { background: #1d4ed8; }
-        .btn.active { background: #10b981; }
-        table { border-collapse: collapse; width: 100%; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 12px; overflow: hidden; margin: 0 auto; }
-        th, td { border: 1px solid #e2e8f0; padding: 10px 6px; text-align: center; transition: all 0.2s ease; background: white; }
-        th { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important; color: white; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; }
-        td { font-size: 0.8rem; font-weight: 500; white-space: nowrap; }
-        .na { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important; color: #64748b; font-style: italic; }
-        .direct { color: #166534; font-weight: 600; cursor: pointer; }
-        .direct:hover { background: #dcfce7 !important; transform: scale(1.02); box-shadow: 0 4px 8px rgba(34,197,94,0.2); }
-        .nodirect { color: #0369a1; font-weight: 500; }
-        .nodirect:hover { background: #e0f2fe !important; }
-        tr th:first-child, td:first-child { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important; font-weight: 600; color: #1e293b; position: sticky; left: 0; z-index: 10; }
-        
-        /* ROW HOVER ONLY - WORKING! */
-        tr:hover td { background-color: rgba(59,130,246,0.05) !important; }
-        
-        .icon { font-size: 1.1rem !important; margin-right: 1px; width: 1.2em; display: inline-block; }
-        .af-icon { background: linear-gradient(to right, #ED2939 33%, #FFFFFF 33% 66%, #002395 66%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-        .legend { text-align: center; font-size: 0.9rem; color: #64748b; margin-top: 20px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .legend strong { color: #1e3a8a; }
-        @media (max-width: 768px) { body { padding: 10px; } .container { overflow-x: auto; } th, td { padding: 6px 3px; font-size: 0.7rem; } .icon { font-size: 1rem !important; } }
-    </style>
-<script src="assets/js/demo-auth.js" defer></script></head>
-<body>
-    <div class="container">
-        <h1>ðŸ›« </h1>
-        <p class="header">Updated:  | Direct flights + Ferries | Alphabetical Order</p>
-        
-        
-        
-        <table>
-            <tr><th>â†“ / â†’</th><th></th></tr>
-            
-            <tr><th></th>
-                
-                
-                    <td class="na">N/A</td>
-                
-                    
-                    <td class="direct">
-                        <span class="duration"></span><br>
-                        
-                            <i class=" airline-" ></i>
-                        
-                        <i class="fas fa-ship icon" style="color:#0369a1"></i>
-                    </td>
-                    
-                    <td class="nodirect">No direct</td>
-                    
-                
-                    <td class="nodirect">No direct</td>
-                
-                
-            </tr>
-            
-        </table>
-        
-        <div class="legend">
-            <strong>Legend:</strong> Green=Direct âœˆï¸ | Blue=No Direct | Gray=N/A | <strong>ðŸš¢ = Ferry</strong>
-        </div>
-    </div>
-<div id="demo-auth-footer"></div><script>document.addEventListener("DOMContentLoaded",()=>DemoAuth&&DemoAuth.renderFooter("#demo-auth-footer"));</script></body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caribbean Connections — UWEC Demo</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/demo-auth.js" defer></script>
+<script src="assets/js/demo-data.js" defer></script>
+</head>
+<body data-demo="caribbean-connections">
+<main class="container">
+<h1>Caribbean Connections</h1>
+<p class="demo-note">Lesser Antilles route matrix — airlines, durations, ferries.</p>
+<div id="module-root"></div>
+</main>
+<div id="demo-auth-footer"></div>
+<script>document.addEventListener('DOMContentLoaded',()=>DemoAuth.renderFooter('#demo-auth-footer'));</script>
+</body>
 </html>
