@@ -338,8 +338,8 @@ body > main section {
 /* === 1. CSS Variables for easy maintenance === */
 :root {
   /* Colors */
-  --primary-bg: #00ff00;
-  --element-bg: #0000ff;
+  --primary-bg: #00005c;
+  --element-bg: #1a1a1a;
   --soft-white: #f2f2f2;
   --text-color: #ffffff;
   --heading-color: #f9f9f9;
