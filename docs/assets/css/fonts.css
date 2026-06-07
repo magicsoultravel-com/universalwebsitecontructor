@@ -1,0 +1,25 @@
+
+/* Font catalog pages */
+.font-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; justify-content: center; }
+.font-nav a { padding: 6px 12px; border-radius: 999px; background: #161b22; color: #ccc; text-decoration: none; font-size: 0.9em; }
+.font-nav a:hover, .font-nav a.active { background: #2a2a5a; color: #fff; }
+.font-nav small { opacity: 0.7; }
+.font-lead { color: #aaa; margin-bottom: 16px; }
+.font-search input { padding: 8px 12px; border-radius: 8px; border: 1px solid #333; background: #161b22; color: #eee; width: min(100%, 320px); }
+.font-count { font-size: 0.85em; color: #888; }
+.font-table-wrap { overflow-x: auto; margin-top: 12px; }
+.font-table { width: 100%; border-collapse: collapse; }
+.font-table th, .font-table td { border: 1px solid #2a2f3a; padding: 8px 10px; text-align: left; vertical-align: middle; }
+.font-table th { background: #161b22; cursor: pointer; user-select: none; }
+.font-table th.sorted-asc::after { content: " ▲"; }
+.font-table th.sorted-desc::after { content: " ▼"; }
+.font-table .sample-text { font-size: 18px; min-width: 200px; }
+.font-table button { padding: 4px 10px; margin: 0 2px; cursor: pointer; }
+.font-hub { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; }
+.font-hub-card { display: block; padding: 16px; background: #1a1a1a; border-radius: 12px; color: #eee; text-decoration: none; text-align: left; transition: transform 0.15s; }
+.font-hub-card:hover { transform: scale(1.02); color: #fff; }
+.font-hub-card span { display: block; color: #8af; font-size: 0.9em; margin: 4px 0; }
+.font-hub-card p { font-size: 0.85em; color: #999; margin: 8px 0 0; }
+body.fonts-page { background: #0d1117; color: #e6edf3; }
+body.fonts-page main { max-width: 1100px; margin: 0 auto; padding: 20px; text-align: left; }
+body.fonts-page h1 { text-align: center; }

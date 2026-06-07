@@ -1,0 +1,70 @@
+{
+  "sampleText": "Lorem ipsum dolor sit amet",
+  "categories": {
+    "sans-serif": {
+      "title": "Sans-serif",
+      "description": "Clean UI and body copy — geometric and humanist families.",
+      "fonts": [
+        "Roboto", "Open Sans", "Lato", "Montserrat", "Raleway", "Oswald",
+        "Source Sans 3", "Poppins", "Nunito", "Ubuntu", "Mulish", "Work Sans", "Exo 2",
+        "Inter", "DM Sans", "Rubik", "Fira Sans", "PT Sans", "Noto Sans", "Quicksand"
+      ]
+    },
+    "serif": {
+      "title": "Serif",
+      "description": "Editorial headings and long-form reading.",
+      "fonts": [
+        "Merriweather", "Playfair Display", "Roboto Slab", "Noto Serif", "PT Serif",
+        "Lora", "Crimson Text", "Libre Baskerville", "EB Garamond", "Cormorant Garamond",
+        "Bitter", "Spectral", "Source Serif 4", "Literata"
+      ]
+    },
+    "handwritten": {
+      "title": "Handwritten",
+      "description": "Casual script and marker-style faces.",
+      "fonts": [
+        "Dancing Script", "Pacifico", "Indie Flower", "Sacramento", "Great Vibes", "Caveat",
+        "Amatic SC", "Fredericka the Great", "Kaushan Script", "Special Elite", "Allura",
+        "Alex Brush", "Satisfy", "Cookie", "Shadows Into Light", "Yellowtail",
+        "Petit Formal Script", "Kalam", "Rock Salt", "Tangerine", "Arizonia", "Courgette",
+        "Rochester", "Herr Von Muellerhoff", "Parisienne", "Marck Script"
+      ]
+    },
+    "calligraphic": {
+      "title": "Calligraphic",
+      "description": "Formal invitation and certificate styles.",
+      "fonts": [
+        "Great Vibes", "Allura", "Alex Brush", "Dancing Script", "Satisfy", "Pacifico",
+        "Rochester", "Parisienne", "Arizonia", "Marck Script", "Petit Formal Script",
+        "Pinyon Script", "Italianno", "Mrs Saint Delafield", "Lovers Quarrel"
+      ]
+    },
+    "display": {
+      "title": "Display",
+      "description": "Poster, logo, and headline impact fonts.",
+      "fonts": [
+        "Bangers", "Anton", "Orbitron", "Press Start 2P", "Creepster", "Lobster",
+        "Righteous", "Patua One", "Viga", "Faster One", "Monoton", "Audiowide",
+        "Bungee Inline", "VT323", "Codystar", "Silkscreen", "Bebas Neue", "Alfa Slab One",
+        "Russo One", "Permanent Marker"
+      ]
+    },
+    "gothic": {
+      "title": "Gothic & Blackletter",
+      "description": "Medieval, fraktur, and vintage metal vibes.",
+      "fonts": [
+        "UnifrakturCook", "UnifrakturMaguntia", "MedievalSharp", "Fruktur", "Uncial Antiqua",
+        "Butcherman", "Aladin", "Nosifer", "Old Standard TT", "IM Fell DW Pica",
+        "IM Fell Double Pica", "Pirata One", "New Rocker"
+      ]
+    },
+    "pixelated": {
+      "title": "Pixel & Monospace",
+      "description": "Retro games, terminals, and code aesthetics.",
+      "fonts": [
+        "Press Start 2P", "VT323", "Silkscreen", "Share Tech Mono", "Fira Code",
+        "Source Code Pro", "IBM Plex Mono", "JetBrains Mono", "Courier Prime", "Space Mono"
+      ]
+    }
+  }
+}
